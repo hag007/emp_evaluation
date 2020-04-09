@@ -1,0 +1,15 @@
+fastsemsim
+goatools
+networkx==2.2
+numpy==1.16.5
+openpyxl==2.5.7
+pandas==0.23.4
+pcst-fast==1.0.7
+scikit-learn==0.19.2
+scipy==1.1.0
+seaborn==0.9.0
+simplejson==3.16.0
+statsmodels==0.9.0
+wget==3.2
+xgboost==0.81
+
