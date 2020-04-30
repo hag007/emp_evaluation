@@ -72,7 +72,7 @@ def compute_redundancy(datasets, algos, pf=10, sim_method='Resnik', cutoffs=[1.0
             df["ranked_terms"]=df.shape[0]-ss.rankdata(df.loc[:, "n_reduced_terms"])
 
 
-        df_summary.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "solution_richness_matrix_{}_{}.tsv".format(prefix,cutoff)),sep='\t')
+        df_summary.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "evaluation", "richness_matrix_{}_{}.tsv".format(prefix,cutoff)),sep='\t')
 
 
 
@@ -147,8 +147,13 @@ if __name__ == "__main__":
     cutoffs = [1.0, 2.0, 3.0, 4.0]
     pf=int(args.pf)
 
-    datasets=["brca", "crh", "scz", "tri", "t2d", "cad", "bmd", "hgt", "amd", "af"] #["tnfa", "hc", "ror", "shera", "shezh", "ers", "iem", "apo", "cbx", "ift", "brca", "crh", "scz", "tri", "t2d", "cad", "bmd", "hgt", "amd", "af"]
-    algos=["DOMINO", "netbox"]
+    datasets=["tnfa", "hc", "ror", "shera", "shezh", "ers", "iem", "apo", "cbx", "ift"]
+    algos=["DOMINO", "netbox", "jactivemodules_greedy", "jactivemodules_sa", "bionet", "keypathwayminer_INES_GREEDY", "hotnet2"]
+    prefix="GE"
     compute_redundancy(datasets=datasets, algos=algos, pf=pf, base_folder=base_folder, file_format=file_format, sim_method=sim_method, cutoffs=cutoffs)
 
+    datasets=["brca", "crh", "scz", "tri", "t2d", "cad", "bmd", "hgt", "amd", "af"]
+    algos=["DOMINO", "netbox", "jactivemodules_greedy", "jactivemodules_sa", "bionet", "keypathwayminer_INES_GREEDY", "hotnet2"]
+    prefix="PASCAL_SUM"
+    compute_redundancy(datasets=datasets, algos=algos, pf=pf, base_folder=base_folder, file_format=file_format, sim_method=sim_method, cutoffs=cutoffs)
 

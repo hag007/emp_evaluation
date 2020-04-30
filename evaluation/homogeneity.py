@@ -129,8 +129,8 @@ def main(prefix, base_folder, sim_method, file_format, pf, datasets, algos, cuto
                 df_homogeneity_avg.loc[cur_alg, cur_ds]=averaged_homogeneities[-1]
                 df_homogeneity_std.loc[cur_alg, cur_ds] = std_homogeneities[-1]
 
-        h_scores.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "h_scores_{}_{}.tsv".format(prefix,str(cutoff))), sep='\t')
-        df_homogeneity_avg.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "homogeneity_avg_matrix_{}_{}.tsv".format(prefix,str(cutoff))), sep='\t')
+        h_scores.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "evaluation", "h_scores_{}_{}.tsv".format(prefix,str(cutoff))), sep='\t')
+        df_homogeneity_avg.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "evaluation", "homogeneity_avg_matrix_{}_{}.tsv".format(prefix,str(cutoff))), sep='\t')
 
 
 if __name__ == "__main__":
@@ -158,8 +158,13 @@ if __name__ == "__main__":
     cutoffs = np.array(args.cutoffs.split(','),dtype=float)
     recalc_module_report=args.recalc_module_report=="true"
 
+    datasets=["tnfa", "hc", "ror", "shera", "shezh", "ers", "iem", "apo", "cbx", "ift"] 
+    algos=["DOMINO", "netbox", "jactivemodules_greedy", "jactivemodules_sa", "bionet", "keypathwayminer_INES_GREEDY", "hotnet2"] 
+    prefix="GE"
+    main(prefix, base_folder, sim_method, file_format, pf, datasets, algos, cutoffs, recalc_module_report)
+
     datasets=["brca", "crh", "scz", "tri", "t2d", "cad", "bmd", "hgt", "amd", "af"]
-    algos=["netbox", "DOMINO"] # ["jactivemodules_greedy", "jactivemodules_sa", "bionet", "netbox", "keypathwayminer_INES_GREEDY"]
+    algos=["DOMINO", "netbox", "jactivemodules_greedy", "jactivemodules_sa", "bionet", "keypathwayminer_INES_GREEDY", "hotnet2"] 
     prefix="PASCAL_SUM"
     main(prefix, base_folder, sim_method, file_format, pf, datasets, algos, cutoffs, recalc_module_report)
 

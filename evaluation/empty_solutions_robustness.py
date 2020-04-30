@@ -19,28 +19,24 @@ from statsmodels.sandbox.stats.multicomp import fdrcorrection0
 from utils.add_GO_terms_metadata_agg import get_all_genes_for_term, vertices
 import multiprocessing
 
-def get_enriched_terms(algos, datasets):
-    for cur_algo in algos:
-        algos_filter = cur_algo
-
+def get_enriched_terms(algo, dataset, x, ss_ratio):
+ 
         df_go = pd.DataFrame(columns=['GO id', 'qval', 'pval'])
         df_go_pvals = pd.DataFrame()
-        df_go_pvals.index.name = "GO id"
-        for cur_ds in datasets:
-            go_results = [os.path.join(constants.OUTPUT_GLOBAL_DIR, cur_ds, cur_algo, cur_module) for cur_algo in
-                          os.listdir(os.path.join(constants.OUTPUT_GLOBAL_DIR, cur_ds))
-                          if os.path.isdir(
-                    os.path.join(constants.OUTPUT_GLOBAL_DIR, cur_ds, cur_algo)) and cur_algo == algos_filter for
-                          cur_module in os.listdir(os.path.join(constants.OUTPUT_GLOBAL_DIR, cur_ds, cur_algo)) if
-                          "separated_modules" in cur_module]
-
-            for cur in go_results:
-                try:
-                    df_go = pd.concat((df_go, pd.read_csv(cur, sep='\t')))
-                    df_go_pvals = pd.concat((df_go_pvals, pd.read_csv(cur, sep='\t').set_index("GO id")['pval']),
-                                            axis=1)
-                except (EmptyDataError, KeyError):
-                    return False
+        df_go_pvals.index.name = "GO id" 
+    
+        report_folder=os.path.join(constants.ROBUSTNESS_SOLUTIONS_DIR, "sol_{}_{}_robustness_{}_{}".format(algo, dataset, x, ss_ratio),"report")
+        n_modules=len(pd.read_csv(os.path.join(report_folder, "modules_summary.tsv"), sep='\t').index)  
+        go_results = [os.path.join(report_folder, cur_module) for cur_module in os.listdir(report_folder) if
+                  "separated_modules" in cur_module and int(cur_module.split("_")[1]) < n_modules]
+        for cur in go_results:
+            try:
+                df_go = pd.concat((df_go, pd.read_csv(cur, sep='\t')))
+                df_go_pvals = pd.concat((df_go_pvals, pd.read_csv(cur, sep='\t').set_index("GO id")['pval']),
+                                        axis=1)
+            except (EmptyDataError, KeyError):
+                print(EmptyDataError)  
+                return False
 
         df_go_pvals[df_go_pvals.isna()] = 1
 
@@ -57,6 +53,7 @@ def get_enriched_terms(algos, datasets):
 
         print "total n_genes with pval:{}/{}".format(np.size(df_go_pvals), 7435)
         hg_pvals = np.append(df_go_pvals, np.ones(7435 - np.size(df_go_pvals)))
+        print(hg_pvals)
         fdr_results = fdrcorrection0(hg_pvals, alpha=0.05, method='indep', is_sorted=False)[0]
         if np.sum(fdr_results) > 0:
             return True
@@ -80,9 +77,9 @@ def count_empties(prefix, dataset, cur, algo, ss_ratio=0.4, empties=None):
     print "starting iteration: {}, {}, {}, {}".format(prefix, dataset, ss_ratio, cur)
     try:
 
-        recovry_dataset=os.path.join(constants.OUTPUT_GLOBAL_DIR,"{}_{}_recovery_{}_{}_{}".format(prefix,dataset,algo, ss_ratio, cur))
+        # recovry_dataset=os.path.join(constants.OUTPUT_GLOBAL_DIR,"{}_{}_robustness_{}_{}_{}".format(prefix,dataset,algo, cur, ss_ratio))
         # if pd.read_csv(os.path.join(recovry_dataset, algo,"modules_summary.tsv"), sep='\t', index_col=0).size==0:
-        empties.append(get_enriched_terms([algo], [recovry_dataset])) # len(df_pval_terms.index) < 2:
+        empties.append(get_enriched_terms(algo, dataset, cur, ss_ratio)) # len(df_pval_terms.index) < 2:
         #     empties.append(0)
         # else:
         #     empties.append(1)
@@ -102,7 +99,7 @@ if __name__ == "__main__":
                         dest='n_start', default=0)
     parser.add_argument('--n_end', help="number of iterations (total n permutation is pf*(n_end-n_start))",
                         dest='n_end', default=100)
-    parser.add_argument('--ss_ratio', help="ss_ratio", dest='ss_ratio', default=0.4)
+    parser.add_argument('--ss_ratio', help="ss_ratio", dest='ss_ratio', default="0.4,0.3,0.2,0.1")
     parser.add_argument('--override_permutations', help="takes max or all samples", dest='override_permutations',
                         default="false")
     parser.add_argument('--base_folder', help="base_folder", dest='base_folder',
@@ -119,17 +116,15 @@ if __name__ == "__main__":
     n_end = int(args.n_end)
     ss_ratios = [float(a) for a in args.ss_ratio.split(",")]
     base_folder = args.base_folder
-    df_empties=pd.DataFrame()
-    summary = []
 
     for ss_ratio in ss_ratios:
 
+        df_empties=pd.DataFrame()
+        summary=[]
         for dataset in datasets:
 
 
             df_all_terms = pd.DataFrame()
-            cur_real_ds = "{}_{}".format(prefix, dataset)
-
             p_means = []
             p_stds = []
             r_means = []
@@ -151,7 +146,7 @@ if __name__ == "__main__":
 
                 print "empties for dataset {} and algo {}: {}".format(dataset, algo, df_empties.loc[algo,datasets])
 
-        fname=os.path.join(constants.OUTPUT_GLOBAL_DIR, "empties_robustness_{}_{}_{}.tsv".format(prefix, n_end, ss_ratio))
+        fname=os.path.join(constants.OUTPUT_GLOBAL_DIR, "evaluation", "robustness_{}_{}_{}_matrix_empty.tsv".format(prefix, n_end, ss_ratio))
         df_empties.to_csv(fname, sep='\t')
         print "save file to: {}".format(fname)
 

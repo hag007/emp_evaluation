@@ -112,6 +112,7 @@ def aggregate_solutions(dataset, cur, algo,
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='args')
+    parser.add_argument('--prefix', dest='prefix', default="GE") 
     parser.add_argument('--datasets', dest='datasets', default="brca")
     parser.add_argument('--algos', dest='algos', default="DOMINO")
     parser.add_argument('--network', dest='network', default="dip.sif")
@@ -120,13 +121,13 @@ if __name__ == "__main__":
                         dest='n_start_r', default=0)
     parser.add_argument('--n_end_r', help="number of iterations (total n permutation is pf*(n_end-n_start))",
                         dest='n_end_r', default=100)
-    parser.add_argument('--ss_ratios', help="ss_ratios", dest='ss_ratios', default="0.4") # ,0.2,0.2,0.1
+    parser.add_argument('--ss_ratios', help="ss_ratios", dest='ss_ratios', default="0.4,0.3,0.2,0.1") # ,0.2,0.2,0.1
     parser.add_argument('--override_permutations', help="takes max or all samples", dest='override_permutations',
                         default="false")
     parser.add_argument('--base_folder', help="base_folder", dest='base_folder', default=constants.OUTPUT_GLOBAL_DIR)
 
     args = parser.parse_args()
-
+    prefix=args.prefix
     datasets = args.datasets.split(",")
     algos = args.algos.split(",")
     network_file_name = args.network
@@ -140,8 +141,10 @@ if __name__ == "__main__":
     summary = []
 
     for ss_ratio in ss_ratios:
+        df = pd.DataFrame()
+        summary = []
         for dataset in datasets:
-
+            
             df_all_terms = pd.DataFrame()
             cur_real_ds = dataset
 
@@ -180,7 +183,7 @@ if __name__ == "__main__":
                                 "r_mean": r_means[-1], "r_std": r_stds[-1], "f1_mean": f1_means[-1], "f1_std": f1_stds[-1],
                                 "algo": algo, "dataset": dataset, "ss_ratio": ss_ratio}, ignore_index=True)
 
-                df.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR,
-                                       "robustness_f1_{}_{}.tsv".format(n_end, ss_ratio)), sep='\t')
-                print "save file to: {}".format(os.path.join(constants.OUTPUT_GLOBAL_DIR, "robustness_results_{}_{}.tsv".format(n_end, ss_ratio)))
+                df.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "evaluation",
+                                       "robustness_f1_{}_{}_{}.tsv".format(prefix, n_end, ss_ratio)), sep='\t')
+                print "save file to: {}".format(os.path.join(constants.OUTPUT_GLOBAL_DIR, "robustness_results_{}_{}_{}.tsv".format(prefix, n_end, ss_ratio)))
 

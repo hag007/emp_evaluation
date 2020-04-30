@@ -16,12 +16,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='args')
     parser.add_argument('--datasets', dest='datasets', default="brca")
     parser.add_argument('--algos', dest='algos', default="DOMINO")
-    parser.add_argument('--prefix', dest='prefix', default="prefix")
+    parser.add_argument('--prefix', dest='prefix', default="GE")
     parser.add_argument('--n_start', help="number of iterations (total n permutation is pf*(n_end-n_start))",
                         dest='n_start', default=0)
     parser.add_argument('--n_end', help="number of iterations (total n permutation is pf*(n_end-n_start))",
                         dest='n_end', default=100)
-    parser.add_argument('--ss_ratios', help="ss_ratios", dest='ss_ratios', default="0.4")
+    parser.add_argument('--ss_ratios', help="ss_ratios", dest='ss_ratios', default="0.4,0.3,0.2,0.1")
 
     args = parser.parse_args()
 
@@ -31,11 +31,12 @@ if __name__ == "__main__":
     n_end = int(args.n_end)
     prefix = args.prefix
     ss_ratios = [float(a) for a in args.ss_ratios.split(",")]
-    df_summary = pd.DataFrame()
-    df_pr_auc=pd.DataFrame()
-    summary = []
 
     for ss_ratio in ss_ratios:
+        df_summary = pd.DataFrame()
+        df_pr_auc=pd.DataFrame()
+        summary=[]
+
         for dataset in datasets:
 
             p_means = []
@@ -101,4 +102,4 @@ if __name__ == "__main__":
                     print "average precision: {}".format(average_precision)
                     print "save curve in :{}".format(os.path.join(constants.OUTPUT_GLOBAL_DIR, "robustness_cache", "pr_curve_terms_recovery_{}_{}_{}_{}.png".format(dataset,algo, n_end, ss_ratio)))
                     df_pr_auc.loc[algo,dataset]=average_precision
-        df_pr_auc.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "robustness_auc_{}_{}_{}.tsv".format(prefix,n_end,ss_ratio)),sep='\t')
+        df_pr_auc.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "evaluation", "robustness_auc_{}_{}_{}.tsv".format(prefix,n_end,ss_ratio)),sep='\t')

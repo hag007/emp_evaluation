@@ -37,9 +37,9 @@ def isFloat(string):
 
 def false_positive_example(algo="jactivemodules_greedy",dataset="TNFa_2", is_corrected=False, axs=None):
 
-    output=pd.read_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR,"emp_fdr","MAX","emp_diff_modules_{}_{}.tsv".format(dataset, algo)), sep='\t', error_bad_lines=False)
+    output=pd.read_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR,"bg","emp_diff_modules_{}_{}.tsv".format(dataset, algo)), sep='\t', error_bad_lines=False)
     output.index=output.loc[:,"GO id"]
-    output_md = pd.read_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "emp_fdr", "MAX", "emp_diff_modules_{}_{}_md.tsv".format(dataset, algo)), sep='\t', error_bad_lines=False)
+    output_md = pd.read_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "md", "emp_diff_modules_{}_{}_md.tsv".format(dataset, algo)), sep='\t', error_bad_lines=False)
     try:
         output_md.index=output_md["GO id"]
         output_md_ids=output_md.loc[np.logical_and.reduce([output_md["n_genes"].values > 5, output_md["n_genes"].values < 500])]['GO id']
@@ -88,7 +88,7 @@ def false_positive_example(algo="jactivemodules_greedy",dataset="TNFa_2", is_cor
     axs[0].set_ylabel("# GO terms", fontsize=fontsize)
     axs[0].set_xlabel(x_label, fontsize=fontsize)
     axs[0].set_title(constants.ALGOS_ACRONYM[algo], fontsize=fontsize)
-    plt.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "pval_dist_real_{}_{}.png".format(constants.DATASETS_ACRONYM[dataset], constants.ALGOS_ACRONYM[algo])))
+    plt.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "pval_dist_real_{}_{}.png".format(dataset, constants.ALGOS_ACRONYM[algo])))
 
     try:
         real_sig_ids = real_pvals[fdrcorrection0([10**-a for a in real_pvals["hg_pval_max"]], alpha=0.05, method='indep', is_sorted=False)[0]]["GO id"]
@@ -120,10 +120,10 @@ if __name__ == "__main__":
 
     for is_corrected in [True]:
         suffix = ("qval" if is_corrected else "pval")
-        datasets=["CBX"]# ["TNFa_2", "Schizophrenia.G50"]  #, "Schizophrenia.G50"
+        datasets=["cbx"]# ["TNFa_2", "Schizophrenia.G50"]  #, "Schizophrenia.G50"
         algos= ["jactivemodules_greedy","jactivemodules_sa","netbox","bionet","hotnet2", "keypathwayminer_INES_GREEDY"] #
         i=0
-        fig,axs=plt.subplots(3, 4, figsize=(52, 12*len(algos)/2))
+        fig,axs=plt.subplots(3, 4, figsize=(56, 12*len(algos)/2))
         for dataset in datasets:
             for i_a, algo in enumerate(algos):
                 print "current solution: {}-{}".format(dataset,algo)
@@ -141,4 +141,4 @@ if __name__ == "__main__":
         # fig.text(0.55, 0.25, "H:", weight='bold', fontsize=fontsize)
         # fig.tight_layout()
         fig.subplots_adjust(wspace=0.34, hspace=0.22)
-        plt.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "figure_11_{}.png".format(suffix)))
+        plt.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "evaluation", "figure_11_{}.png".format(suffix)))
