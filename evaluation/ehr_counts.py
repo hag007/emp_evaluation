@@ -24,10 +24,10 @@ def ehr_for_solution(algo_sample = None, dataset_sample = None,tsv_file_name=os.
     filtered_genes=output_md.loc[np.logical_and.reduce([output_md["n_genes"].values > 5, output_md["n_genes"].values < 500]), ["GO name","hg_pval_max", "emp_pval_max", "passed_oob_permutation_test"]]
 
 
-    print "total n_genes with pval:{}/{}".format(np.size(filtered_genes["hg_pval_max"].values), 7435)
+    print "total n_genes with pval:{}/{}".format(np.size(filtered_genes["hg_pval_max"].values), 7035)
 
     sorted_genes_hg = filtered_genes.sort_values(by=['hg_pval_max'], ascending=False)
-    sig_genes_hg_pval=np.append(sorted_genes_hg["hg_pval_max"].values,np.zeros(7435-np.size(sorted_genes_hg["hg_pval_max"].values)))
+    sig_genes_hg_pval=np.append(sorted_genes_hg["hg_pval_max"].values,np.zeros(7035-np.size(sorted_genes_hg["hg_pval_max"].values)))
     sig_genes_hg_pval = [10**(-x) for x in sig_genes_hg_pval]
     fdr_results = fdrcorrection0(sig_genes_hg_pval, alpha=0.05, method='indep', is_sorted=False)
     n_hg_true = len([cur for cur in fdr_results[0] if cur])
@@ -96,11 +96,16 @@ if __name__ == "__main__":
 
 
     # datasets=["tnfa", "hc", "ror", "shera", "shezh", "ers", "iem", "apo", "cbx", "ift"]
-    # algos=["jactivemodules_greedy", "jactivemodules_sa", "bionet", "netbox", "keypathwayminer_INES_GREEDY"]
+    # algos=["jactivemodules_greedy", "netbox", "DOMINO"]
     # prefix="GE"
     # main(datasets,algos,prefix)
 
-    datasets=["brca", "crh", "scz", "tri", "t2d", "cad", "bmd", "hgt", "amd", "af"]
-    algos=["netbox", "DOMINO"]
+    datasets=["hgt"] # ["brca", "crh", "scz", "tri", "t2d", "cad", "bmd", "hgt", "amd", "af"]
+    algos=["netbox"] # ["jactivemodules_greedy","netbox", "DOMINO"]
     prefix="PASCAL_SUM"
     main(datasets,algos,prefix)
+
+    # datasets=["brca", "crh", "scz", "tri", "t2d", "cad", "bmd", "hgt", "amd", "af"]
+    # algos=["netbox", "DOMINO"]
+    # prefix="PASCAL_SUM"
+    # main(datasets,algos,prefix)

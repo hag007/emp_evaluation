@@ -1,35 +1,19 @@
-import math
-import random
 import sys
 sys.path.insert(0, '../')
 
 import pandas as pd
 
 from fastsemsim.SemSim import *
-from fastsemsim.Ontology import ontologies
-from fastsemsim.Ontology import AnnotationCorpus
-from fastsemsim.SemSim.SetSemSim import SetSemSim
 
 import matplotlib
 matplotlib.use("Agg")
 import seaborn as sns
-from rpy2.robjects import pandas2ri
-pandas2ri.activate()
 
 import constants
 
-import multiprocessing
-
-from utils.daemon_multiprocessing import func_star
-
 import argparse
 
-import utils.go_hierarcies as go_hierarcies
-
-import simplejson as json
-
 import matplotlib.pyplot as plt
-from matplotlib.patches import Circle
 
 
 def main(algos=None, datasets=None, prefix="", cutoffs=[1.0, 2.0, 3.0, 4.0, 5.0], ax=None, axs_violin=None, title=""):
@@ -40,7 +24,7 @@ def main(algos=None, datasets=None, prefix="", cutoffs=[1.0, 2.0, 3.0, 4.0, 5.0]
     df_summary_agg = pd.DataFrame()
     for cutoff in cutoffs:
         df_summary=pd.read_csv(
-            os.path.join(constants.OUTPUT_GLOBAL_DIR, "solution_richness_matrix_{}_{}.tsv".format(prefix, cutoff)),
+            os.path.join(constants.OUTPUT_GLOBAL_DIR, "evaluation", "richness_matrix_{}_{}.tsv".format(prefix, cutoff)),
             sep='\t', index_col=0).loc[algos,datasets]
 
         for a in set(df_summary.index).intersection(constants.ALGOS):
@@ -56,7 +40,7 @@ def main(algos=None, datasets=None, prefix="", cutoffs=[1.0, 2.0, 3.0, 4.0, 5.0]
     results = {}
     for cutoff in cutoffs:
         df_summary=pd.read_csv(
-            os.path.join(constants.OUTPUT_GLOBAL_DIR, "solution_richness_matrix_{}_{}.tsv".format(prefix, cutoff)),
+            os.path.join(constants.OUTPUT_GLOBAL_DIR, "evaluation", "richness_matrix_{}_{}.tsv".format(prefix, cutoff)),
             sep='\t', index_col=0).loc[algos,datasets]
 
         for k, v in df_summary.iterrows():
@@ -121,14 +105,14 @@ if __name__ == "__main__":
 
     fig, axs = plt.subplots(1,2,figsize=(20,10))
     fig_violin, axs_violin = plt.subplots(2,len(cutoffs),figsize=(4*len(cutoffs)*2,10))
+    datasets = ["tnfa", "hc", "ror", "shera", "shezh", "ers", "iem", "apo", "cbx", "ift"]
+    algos = ["DOMINO", "netbox", "jactivemodules_greedy", "jactivemodules_sa", "bionet", "keypathwayminer_INES_GREEDY", "hotnet2"]
     prefix = "GE"
-    datasets=["TNFa_2","HC12","ROR_1" ,"ERS_1","IEM","SHERA","SHEZH_1","APO","CBX","IFT"]
-    algos=["jactivemodules_greedy", "jactivemodules_sa", "bionet", "netbox", "keypathwayminer_INES_GREEDY","domino_original"] #,"dcem"
     main(algos=algos, datasets=datasets, prefix=prefix, cutoffs=cutoffs, ax=axs[0], axs_violin=axs_violin[0], title="GE")
 
+    datasets = ["brca", "crh", "scz", "tri", "t2d", "cad", "bmd", "hgt", "amd", "af"]
+    algos = ["DOMINO", "netbox", "jactivemodules_greedy", "jactivemodules_sa", "bionet", "keypathwayminer_INES_GREEDY", "hotnet2"]
     prefix = "PASCAL_SUM"
-    datasets=["Breast_Cancer.G50", "Crohns_Disease.G50", "Schizophrenia.G50", "Triglycerides.G50", "Type_2_Diabetes.G50","Coronary_Artery_Disease.G50","Bone_Mineral_Density.G50","Height1.G50","Age_Related_Macular_Degeneration.G50", "Atrial_Fibrillation.G50"]
-    algos = ["jactivemodules_greedy", "jactivemodules_sa", "bionet", "netbox","domino_original"]
     main(algos=algos, datasets=datasets, prefix=prefix, cutoffs=cutoffs, ax=axs[1], axs_violin=axs_violin[1], title="GWAS")
 
     fig.text(0.01, 0.97, "A:", weight='bold', fontsize=22)
@@ -136,7 +120,7 @@ if __name__ == "__main__":
     fig.tight_layout()
     fig.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR,"figure_13.png"))
 
-    fig_violin.text(0.0, 0.97, "A:", weight='bold', fontsize=22)
-    fig_violin.text(0.0, 0.5, "B:", weight='bold', fontsize=22)
-    fig_violin.tight_layout()
-    fig_violin.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "figure_13_violin.png"))
+    # fig_violin.text(0.0, 0.97, "A:", weight='bold', fontsize=22)
+    # fig_violin.text(0.0, 0.5, "B:", weight='bold', fontsize=22)
+    # fig_violin.tight_layout()
+    # fig_violin.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "figure_13_violin.png"))

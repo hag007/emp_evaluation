@@ -43,7 +43,7 @@ def modules_ehr_for_solution(algo_sample = None, dataset_sample = None, prefix=N
     output_terms = output_terms.rename(columns={"filtered_pval": "hg_pval_max"})
     filtered_genes=output_terms.loc[np.logical_and.reduce([output_terms["n_genes"].values > 5, output_terms["n_genes"].values < 500]), ["GO name","hg_pval_max", "emp_pval_max", "passed_oob_permutation_test"]]
 
-    output_modules = pd.read_csv(modules_file_name.format(prefix,dataset_sample, algo_sample), sep='\t', index_col=0).dropna()
+    output_modules = pd.read_csv(modules_file_name.format(dataset_sample, algo_sample), sep='\t', index_col=0).dropna()
 
     statistics = {}
     full_data = pd.DataFrame()
@@ -114,6 +114,8 @@ def modules_ehr_for_solution(algo_sample = None, dataset_sample = None, prefix=N
         full_data.loc["{}_{}_module_{}".format(dataset_sample, algo_sample, a), "EHR"] = round(float(len(tps[a])) / max(len(tps[a]) + len(fps[a]), 1),2)
         full_data.loc["{}_{}_module_{}".format(dataset_sample, algo_sample, a),"tp"]="\n".join(tps[a])
         full_data.loc["{}_{}_module_{}".format(dataset_sample, algo_sample, a),"fp"]="\n".join(fps[a])
+        # full_data.loc["{}_{}_module_{}".format(dataset_sample, algo_sample, a),"genes"] =
+        full_data.loc["{}_{}_module_{}".format(dataset_sample, algo_sample, a), "module_size".format(a)] = output_modules.loc[a, '#_genes']
 
         if statistics["module_{}_emp_ratio".format(a)] >emp_ratio_th:
             real_modules_counter+=1

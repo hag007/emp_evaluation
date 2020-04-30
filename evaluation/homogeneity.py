@@ -158,8 +158,13 @@ if __name__ == "__main__":
     cutoffs = np.array(args.cutoffs.split(','),dtype=float)
     recalc_module_report=args.recalc_module_report=="true"
 
+    datasets=["tnfa", "hc", "ror", "shera", "shezh", "ers", "iem", "apo", "cbx", "ift"] # , "brca", "crh", "scz", "tri", "t2d", "cad", "bmd", "hgt", "amd", "af"]
+    algos=["DOMINO", "netbox", "jactivemodules_greedy"]
+    prefix ="GE"
+    main(prefix, base_folder, sim_method, file_format, pf, datasets, algos, cutoffs, recalc_module_report)
+
     datasets=["brca", "crh", "scz", "tri", "t2d", "cad", "bmd", "hgt", "amd", "af"]
-    algos=["netbox", "DOMINO"] # ["jactivemodules_greedy", "jactivemodules_sa", "bionet", "netbox", "keypathwayminer_INES_GREEDY"]
+    algos=["netbox", "DOMINO", "jactivemodules_greedy"] # ["jactivemodules_greedy", "jactivemodules_sa", "bionet", "netbox", "keypathwayminer_INES_GREEDY"]
     prefix="PASCAL_SUM"
     main(prefix, base_folder, sim_method, file_format, pf, datasets, algos, cutoffs, recalc_module_report)
 

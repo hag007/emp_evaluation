@@ -1,9 +1,7 @@
 import pandas as pd
-
-from infra import *
-
-from rpy2.robjects import pandas2ri
-pandas2ri.activate()
+import matplotlib.pyplot as plt
+import numpy as np
+import os
 import constants
 
 from matplotlib.lines import Line2D
@@ -33,21 +31,31 @@ def plot_itegrated_recovery(ss_ratios, base_folder, average_file_format, auc_fil
         n_iterations = 100 # len(
             # pd.read_csv(os.path.join(base_folder, average_file_format.format(suffix, cur_ss_ratio)), sep='\t',
             #             index_col=0)["precisions"][0][1:-1].split(", "))
-        print "n_teration for ss_ratio={}: {}".format(cur_ss_ratio, n_iterations)
+        print "n_iteration for ss_ratio={}: {}".format(cur_ss_ratio, n_iterations)
         df_cur_pr = pd.read_csv(os.path.join(base_folder, auc_file_format.format(suffix, cur_ss_ratio)), sep='\t',
                                 index_col=0).loc[:,datasets]#[~np.logical_or(df_zeros == 0, np.isnan(df_zeros))]
+
+        df_cur_pr[pd.isnull(df_cur_pr)]=0
         df_cur_pr=df_cur_pr.mean(axis=1)
         df_cur_p = pd.read_csv(os.path.join(base_folder, p_file_format.format(suffix, cur_ss_ratio)), sep='\t',
                                index_col=0).loc[:,datasets]#[~np.logical_or(df_zeros == 0, np.isnan(df_zeros))]
+
+        df_cur_p[pd.isnull(df_cur_p)]=0
         df_cur_p=df_cur_p.mean(axis=1)
         df_cur_r = pd.read_csv(os.path.join(base_folder, r_file_format.format(suffix, cur_ss_ratio)), sep='\t',
                                index_col=0).loc[:,datasets]#[~np.logical_or(df_zeros == 0, np.isnan(df_zeros))]
+
+        df_cur_r[pd.isnull(df_cur_r)]=0
         df_cur_r=df_cur_r.mean(axis=1)
         df_cur_f1 = pd.read_csv(os.path.join(base_folder, f1_file_format.format(suffix, cur_ss_ratio)), sep='\t',
                                 index_col=0).loc[:,datasets]#[~np.logical_or(df_zeros == 0, np.isnan(df_zeros))]
+
+        df_cur_f1[pd.isnull(df_cur_f1)]=0
         df_cur_f1=df_cur_f1.mean(axis=1)
         df_cur_empty = pd.read_csv(os.path.join(base_folder, empty_file_format.format(suffix, cur_ss_ratio)), sep='\t',
                                    index_col=0).loc[:,datasets]#[~np.logical_or(df_zeros == 0, np.isnan(df_zeros))].mean(axis=1) / float(n_iterations)
+
+        df_cur_empty[pd.isnull(df_cur_empty)]=0
         df_cur_empty=df_cur_empty.mean(axis=1)
 
 
@@ -112,28 +120,28 @@ def plot_itegrated_recovery(ss_ratios, base_folder, average_file_format, auc_fil
 
 if __name__=="__main__":
 
-    base_folder="/media/hag007/Data/bnet/output/emp_fdr/MAX"
-    auc_file_format = "pr_auc_recovery_summary_{}_{}.tsv"
-    p_file_format = "recovery_results_{}_{}_matrix_p.tsv"
-    r_file_format = "recovery_results_{}_{}_matrix_r.tsv"
-    f1_file_format = "recovery_results_{}_{}_matrix_f1.tsv"
-    empty_file_format = "recovery_results_{}_{}_matrix_empty.tsv"
-    average_file_format="recovery_results_{}_{}.tsv"
-    zeros_file_format = os.path.join('/home/hag007/Desktop/aggregate{}_report/venn',"count_matrix.tsv")
+    base_folder=os.path.join(constants.OUTPUT_GLOBAL_DIR,"evaluation")
+    auc_file_format = "robustness_auc_{}_{}.tsv"
+    p_file_format = "robustness_{}_{}_matrix_p.tsv"
+    r_file_format = "robustness_{}_{}_matrix_r.tsv"
+    f1_file_format = "robustness_{}_{}_matrix_f1.tsv"
+    empty_file_format = "robustness_{}_{}_matrix_empty.tsv"
+    average_file_format="robustness_{}_{}.tsv"
+    zeros_file_format = os.path.join(constants.OUTPUT_GLOBAL_DIR, "evaluation","count_matrix_{}.tsv")
     ss_ratios = [0.1, 0.2, 0.3, 0.4]
 
     fig,axs=plt.subplots(2,2,figsize=(18,16))
-    suffix = "GE_100"
-    omic_type=""
-    zeros_file_name = zeros_file_format.format(omic_type)
-    algos = ["jactivemodules_greedy", "jactivemodules_sa", "bionet", "netbox", "keypathwayminer_INES_GREEDY","domino_original"]
-    datasets = ["TNFa_2", "HC12", "SHERA", "SHEZH_1", "ROR_1", "ERS_1", "IEM" , "APO", "CBX", "IFT"]
+    prefix="GE"
+    suffix = "{}_100".format(prefix)
+    zeros_file_name =  zeros_file_format.format(prefix)
+    algos = ["jactivemodules_greedy", "jactivemodules_sa", "bionet", "netbox", "keypathwayminer_INES_GREEDY", "DOMINO", "hotnet2"]
+    datasets = ["tnfa", "hc", "ror", "shera", "shezh", "ers", "iem", "apo", "cbx", "ift"]
     plot_itegrated_recovery(ss_ratios, base_folder, average_file_format, auc_file_format, p_file_format, r_file_format, f1_file_format, empty_file_format, zeros_file_name, suffix, axs=axs[:,0], title="GE", algos=algos, datasets=datasets)
-    suffix = "PASCAL_SUM_100"
-    omic_type="_gwas"
-    zeros_file_name = zeros_file_format.format(omic_type)
-    algos = ["jactivemodules_greedy", "jactivemodules_sa", "bionet", "netbox","domino_original"]
-    datasets=["Breast_Cancer.G50", "Crohns_Disease.G50", "Schizophrenia.G50", "Triglycerides.G50", "Type_2_Diabetes.G50" ,"Coronary_Artery_Disease.G50"  , "Bone_Mineral_Density.G50", "Height1.G50", "Age_Related_Macular_Degeneration.G50", "Atrial_Fibrillation.G50"]
+    prefix = "PASCAL_SUM"
+    suffix = "{}_100".format(prefix)
+    zeros_file_name =  zeros_file_format.format(prefix)
+    algos = ["jactivemodules_greedy", "jactivemodules_sa", "bionet", "netbox", "keypathwayminer_INES_GREEDY", "DOMINO", "hotnet2"]
+    datasets = ["brca", "crh", "scz", "tri", "t2d", "cad", "bmd", "hgt", "amd", "af"]
     plot_itegrated_recovery(ss_ratios, base_folder, average_file_format, auc_file_format, p_file_format, r_file_format,
                             f1_file_format, empty_file_format, zeros_file_name, suffix, axs=axs[:,1], title="GWAS", algos=algos, datasets=datasets)
 

@@ -1,9 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 from fastsemsim.SemSim import *
-from rpy2.robjects import pandas2ri
-
-pandas2ri.activate()
 import constants
 
 from matplotlib.lines import Line2D
@@ -76,7 +73,7 @@ def variability_plot(algos, datasets, base_folder, homogeneity_file_format, homo
 
 if __name__=="__main__":
 
-    base_folder=constants.OUTPUT_GLOBAL_DIR
+    base_folder=os.path.join(constants.OUTPUT_GLOBAL_DIR, "evaluation")
     homogeneity_file_format = "homogeneity_avg_matrix_{}_{}.tsv"
     homogeneity_std_file_format = "homogeneity_std_matrix_{}_{}.tsv"
     heterogeneity_file_format = "heterogeneity_avg_matrix_{}_{}.tsv"
@@ -86,23 +83,23 @@ if __name__=="__main__":
     fig,axs=plt.subplots(1,2, figsize=(22,10))
     fig_violin, axs_violin = plt.subplots(2, len(cutoffs), figsize=(4 * len(cutoffs) * 2, 10))
 
+    datasets = ["tnfa", "hc", "ror", "shera", "shezh", "ers", "iem", "apo", "cbx", "ift"]
+    algos = ["DOMINO", "netbox", "jactivemodules_greedy", "jactivemodules_sa", "bionet", "keypathwayminer_INES_GREEDY", "hotnet2"]
+    prefix = "GE"
+    variability_plot(algos, datasets, base_folder, homogeneity_file_format, homogeneity_std_file_format, heterogeneity_file_format, prefix, cutoffs, axs[0], axs_violin[0], title="GE")
 
-    suffix = "GE"
-    algos = ["jactivemodules_greedy", "jactivemodules_sa", "bionet", "netbox", "keypathwayminer_INES_GREEDY", "domino_original"]
-    datasets=["TNFa_2", "HC12", "ROR_1", "SHERA", "SHEZH_1", "ERS_1", "IEM", "APO", "CBX", "IFT"]
-    variability_plot(algos, datasets, base_folder, homogeneity_file_format, homogeneity_std_file_format, heterogeneity_file_format, suffix, cutoffs, axs[0], axs_violin[0], title="GE")
-    suffix = "PASCAL_SUM"
-    algos = ["jactivemodules_greedy", "jactivemodules_sa", "bionet", "netbox", "domino_original"]
-    datasets=["Breast_Cancer.G50", "Crohns_Disease.G50", "Schizophrenia.G50", "Triglycerides.G50", "Type_2_Diabetes.G50", "Coronary_Artery_Disease.G50", "Bone_Mineral_Density.G50", "Height1.G50", "Age_Related_Macular_Degeneration.G50", "Atrial_Fibrillation.G50"] # , "Alzheimer.G50"
-    variability_plot(algos, datasets, base_folder, homogeneity_file_format, homogeneity_std_file_format, heterogeneity_file_format, suffix, cutoffs, axs[1], axs_violin[1], title="GWAS")
+    datasets = ["brca", "crh", "scz", "tri", "t2d", "cad", "bmd", "hgt", "amd", "af"]
+    algos = ["DOMINO", "netbox", "jactivemodules_greedy", "jactivemodules_sa", "bionet", "keypathwayminer_INES_GREEDY", "hotnet2"]
+    prefix = "PASCAL_SUM"
+    variability_plot(algos, datasets, base_folder, homogeneity_file_format, homogeneity_std_file_format, heterogeneity_file_format, prefix, cutoffs, axs[1], axs_violin[1], title="GWAS")
 
     fig.text(0.01,0.97, "A:", weight='bold',fontsize=22)
     fig.text(0.5, 0.97, "B:", weight='bold',fontsize=22)
     fig.tight_layout()
     fig.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "figure_15.png"))
 
-    fig_violin.text(0.0, 0.97, "A:", weight='bold', fontsize=22)
-    fig_violin.text(0.0, 0.5, "B:", weight='bold', fontsize=22)
-    fig_violin.tight_layout()
-    fig_violin.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "figure_15_violin.png"))
+    # fig_violin.text(0.0, 0.97, "A:", weight='bold', fontsize=22)
+    # fig_violin.text(0.0, 0.5, "B:", weight='bold', fontsize=22)
+    # fig_violin.tight_layout()
+    # fig_violin.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "figure_15_violin.png"))
 

@@ -1,29 +1,10 @@
+import matplotlib.pyplot as plt
 import pandas as pd
-
 from fastsemsim.SemSim import *
 
-import matplotlib.pyplot as plt
-
-from rpy2.robjects import pandas2ri
-pandas2ri.activate()
-from mpl_toolkits.mplot3d import Axes3D
 import constants
 
-from scipy.cluster import hierarchy
-import scipy.cluster.hierarchy as hcl
-from scipy.spatial.distance import squareform
-
-
-import utils.go
-import utils.go_hierarcies
-import math
-import random
-import matplotlib.cm as cm
-
 from matplotlib.lines import Line2D
-import matplotlib.colors as ml_colors
-
-from mpl_toolkits.axes_grid1 import make_axes_locatable, axes_size
 
 import seaborn as sns
 
@@ -190,8 +171,8 @@ def dot_plot(df_measurements, y_label, filter_zeros=False, ax=None, algos=None, 
     ax.legend(handles=patches, loc=(0.0,1.0), fontsize=20, facecolor='#ffffff')
     ax.set_xticklabels([a for a in ax.get_xticklabels()], rotation=45)
 
-    plt.tight_layout()
-    plt.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "datasets_algo_dot_{}.png".format(title)))
+    # plt.tight_layout()
+    # plt.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "datasets_algo_dot_{}.png".format(title)))
 
 
 
@@ -199,35 +180,32 @@ def main():
 
     fig_4, axs_4 = plt.subplots(2,2, figsize=(20, 20))
     fig_5, axs_5 = plt.subplots(1,2, figsize=(25, 12))
-    fig_6, axs_6 = plt.subplots(1,2, figsize=(25, 12))
-    algos=["jactivemodules_greedy", "jactivemodules_sa", "netbox", "keypathwayminer_INES_GREEDY", "hotnet2", "bionet", "domino_original"]
 
-    main_path = "/home/hag007/Desktop/aggregate_report/venn"
-    df_measurements_ratio=pd.read_csv(os.path.join(main_path, "ratio_matrix.tsv"), sep='\t', index_col=0) # .loc[np.sort(constants.ALGOS_ACRONYM.keys()),:]
+    prefix="GE"
+    algos=["jactivemodules_greedy", "netbox", "jactivemodules_sa", "bionet", "keypathwayminer_INES_GREEDY" ,"hotnet2", "DOMINO"]
+    main_path =os.path.join(constants.OUTPUT_GLOBAL_DIR, "evaluation")
+    df_measurements_ratio=pd.read_csv(os.path.join(main_path, "ehr_matrix_{}.tsv".format(prefix)), sep='\t', index_col=0) # .loc[np.sort(constants.ALGOS_ACRONYM.keys()),:]
 
-    dot_plot(df_measurements_ratio, "EHR", ax=axs_4[0][0], algos=algos, title="EHR, GE")
+    dot_plot(df_measurements_ratio, "EHR", ax=axs_4[0][0], algos=algos, title="EHR, {}".format(prefix))
 
-    main_path = "/home/hag007/Desktop/aggregate_report/venn"
-    df_measurements_counts = pd.read_csv(os.path.join(main_path, "count_matrix.tsv"), sep='\t', index_col=0) # .loc[np.sort(constants.ALGOS_ACRONYM.keys()),:] # ratio_matrix.tsv
-    dot_plot(df_measurements_counts, "# EV terms", ax=axs_4[1][0], algos=algos,  title="EV terms, GE")
+    df_measurements_counts = pd.read_csv(os.path.join(main_path, "count_matrix_{}.tsv".format(prefix)), sep='\t', index_col=0) # .loc[np.sort(constants.ALGOS_ACRONYM.keys()),:] # ratio_matrix.tsv
+    dot_plot(df_measurements_counts, "# EV terms", ax=axs_4[1][0], algos=algos,  title="EV terms, {}".format(prefix))
 
-    main_path= constants.OUTPUT_GLOBAL_DIR
-    df_measurements_richness=pd.read_csv(os.path.join(main_path, "solution_richness_matrix_GE_2.0.tsv"), sep='\t', index_col=0) # .loc[np.sort(constants.ALGOS_ACRONYM.keys()),:]
+    df_measurements_richness=pd.read_csv(os.path.join(main_path, "richness_matrix_{}_2.0.tsv".format(prefix)), sep='\t', index_col=0) # .loc[np.sort(constants.ALGOS_ACRONYM.keys()),:]
 
-    scatter_plot(df_measurements_ratio, df_measurements_richness, ax=axs_5[0], title="EHR-Richness, GE", algos=algos)
+    scatter_plot(df_measurements_ratio, df_measurements_richness, ax=axs_5[0], title="EHR-Richness, {}".format(prefix), algos=algos)
 
-    main_path = "/home/hag007/Desktop/aggregate_gwas_report/venn"
-    df_measurements_ratio=pd.read_csv(os.path.join(main_path, "ratio_matrix.tsv"), sep='\t', index_col=0) # .loc[np.sort(constants.ALGOS_ACRONYM.keys()),:]
-    dot_plot(df_measurements_ratio, "EHR", ax=axs_4[0][1], algos=algos, title="EHR, GWAS")
+    prefix = "PASCAL_SUM"
+    algos=["jactivemodules_greedy", "netbox", "jactivemodules_sa", "bionet", "keypathwayminer_INES_GREEDY","hotnet2", "DOMINO"]
+    df_measurements_ratio=pd.read_csv(os.path.join(main_path, "ehr_matrix_{}.tsv".format(prefix)), sep='\t', index_col=0) # .loc[np.sort(constants.ALGOS_ACRONYM.keys()),:]
+    dot_plot(df_measurements_ratio, "EHR", ax=axs_4[0][1], algos=algos, title="EHR, {}".format("GWAS"))
 
-    main_path = "/home/hag007/Desktop/aggregate_gwas_report/venn"
-    df_measurements_counts = pd.read_csv(os.path.join(main_path, "count_matrix.tsv"), sep='\t', index_col=0) # .loc[np.sort(constants.ALGOS_ACRONYM.keys()),:] # ratio_matrix.tsv
-    dot_plot(df_measurements_counts, "# EV terms", ax=axs_4[1][1], algos=algos, title="EV terms, GWAS")
+    df_measurements_counts = pd.read_csv(os.path.join(main_path, "count_matrix_{}.tsv".format(prefix)), sep='\t', index_col=0) # .loc[np.sort(constants.ALGOS_ACRONYM.keys()),:] # ratio_matrix.tsv
+    dot_plot(df_measurements_counts, "# EV terms", ax=axs_4[1][1], algos=algos, title="EV terms, {}".format("GWAS"))
 
-    main_path= constants.OUTPUT_GLOBAL_DIR
-    df_measurements_richness=pd.read_csv(os.path.join(main_path, "solution_richness_matrix_PASCAL_SUM_2.0.tsv"), sep='\t', index_col=0) # .loc[np.sort(constants.ALGOS_ACRONYM.keys()),:]
-    algos=["jactivemodules_greedy", "jactivemodules_sa", "netbox", "keypathwayminer_INES_GREEDY", "bionet", "domino_original"]
-    scatter_plot(df_measurements_ratio, df_measurements_richness, ax=axs_5[1], title="EHR-Richness, GWAS", algos=algos)
+    df_measurements_richness=pd.read_csv(os.path.join(main_path, "richness_matrix_{}_2.0.tsv".format(prefix)), sep='\t', index_col=0) # .loc[np.sort(constants.ALGOS_ACRONYM.keys()),:]
+
+    scatter_plot(df_measurements_ratio, df_measurements_richness, ax=axs_5[1], title="EHR-Richness, {}".format(prefix), algos=algos)
 
 
     # fig_4.text(0.01,0.98, "A", weight='bold',fontsize=22)

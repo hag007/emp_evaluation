@@ -147,8 +147,14 @@ if __name__ == "__main__":
     cutoffs = [1.0, 2.0, 3.0, 4.0]
     pf=int(args.pf)
 
+    datasets=["tnfa", "hc", "ror", "shera", "shezh", "ers", "iem", "apo", "cbx", "ift"] # , "brca", "crh", "scz", "tri", "t2d", "cad", "bmd", "hgt", "amd", "af"]
+    algos=["DOMINO", "netbox", "jactivemodules_greedy"]
+    prefix ="GE"
+    compute_redundancy(datasets=datasets, algos=algos, pf=pf, base_folder=base_folder, file_format=file_format, sim_method=sim_method, cutoffs=cutoffs)
+
     datasets=["brca", "crh", "scz", "tri", "t2d", "cad", "bmd", "hgt", "amd", "af"] #["tnfa", "hc", "ror", "shera", "shezh", "ers", "iem", "apo", "cbx", "ift", "brca", "crh", "scz", "tri", "t2d", "cad", "bmd", "hgt", "amd", "af"]
-    algos=["DOMINO", "netbox"]
+    algos=["DOMINO", "netbox", "jactivemodules_greedy"]
+    prefix ="PASCAL_SUM"
     compute_redundancy(datasets=datasets, algos=algos, pf=pf, base_folder=base_folder, file_format=file_format, sim_method=sim_method, cutoffs=cutoffs)
 
 

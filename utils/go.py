@@ -101,7 +101,7 @@ def check_group_enrichment_tango(tested_gene_file_name, total_gene_file_name, al
 
 
 
-def check_group_enrichment_goatools(tested_gene_file_name, total_gene_file_name, th=0.05):
+def check_group_enrichment_goatools(tested_gene_file_name, total_gene_file_name, th=1):
     if len(tested_gene_file_name) == 0 or len(total_gene_file_name) == 0: return []
 
     if type(total_gene_file_name) == str:

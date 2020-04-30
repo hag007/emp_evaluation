@@ -11,14 +11,14 @@ if __name__=="__main__":
     fig,axs=plt.subplots(1,2,figsize=(20,10))
 
     for prefix, ax, algos in zip(prefixes, axs,
-                                 [["jactivemodules_greedy", "jactivemodules_sa", "bionet", "netbox", "keypathwayminer_INES_GREEDY", "domino_original"],
-                                  ["jactivemodules_greedy", "jactivemodules_sa", "bionet", "netbox", "domino_original"]]):
+                                 [["jactivemodules_greedy", "jactivemodules_sa", "bionet", "netbox", "keypathwayminer_INES_GREEDY", "DOMINO", "hotnet2"],
+                                  ["jactivemodules_greedy", "jactivemodules_sa", "bionet", "netbox", "keypathwayminer_INES_GREEDY", "DOMINO", "hotnet2"]]):
         ax.set_facecolor("#FFFFFF")
         ax.grid(color='gray')
         df_means=pd.DataFrame()
-        empties_file_format="empties_robustness_{}_100_{{}}.tsv".format(prefix)
+        empties_file_format="robustness_{}_100_{{}}_matrix_empty.tsv".format(prefix)
         for ss_ratio in [0.4,0.3,0.2,0.1]:
-            df_means=pd.concat([df_means, pd.read_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR,empties_file_format.format(ss_ratio)), sep='\t', index_col=0).mean(axis=1)], axis=1)
+            df_means=pd.concat([df_means, pd.read_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "evaluation", empties_file_format.format(ss_ratio)), sep='\t', index_col=0).mean(axis=1)], axis=1)
 
         df_means=df_means.loc[algos,:]
         for idx, values in df_means.iterrows():
