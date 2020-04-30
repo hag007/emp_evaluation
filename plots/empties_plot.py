@@ -36,4 +36,4 @@ if __name__=="__main__":
     plt.tight_layout()
 
 
-    plt.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "figure_19.png"))
+    plt.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "plots", "figure_19.png"))

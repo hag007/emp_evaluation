@@ -11,8 +11,6 @@ import multiprocessing
 from utils.daemon_multiprocessing import func_star
 from statsmodels.sandbox.stats.multicomp import fdrcorrection0
 
-
-
 def isFloat(string):
     try:
         float(string)
@@ -29,7 +27,6 @@ def false_positive_example(algo="jactivemodules_greedy",dataset="TNFa_2", result
     if not "GO id" in output_md.columns:
         df_summary.loc[dataset, algo]="0/0=0"
         return 
-
 
     output_md_ids=output_md.loc[np.logical_and.reduce([output_md["n_genes"].values > 5, output_md["n_genes"].values < 500])]['GO id']
     output=output.loc[output["GO id"].isin(output_md_ids.values)]

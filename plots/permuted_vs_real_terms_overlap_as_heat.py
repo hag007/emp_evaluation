@@ -25,13 +25,11 @@ def isFloat(string):
 
 def false_positive_example(algo="jactivemodules_greedy",dataset="TNFa_2", results=None):
     print "running combination: {}, {}".format(dataset,algo)
-    output=pd.read_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR,"evaluation","bg","emp_diff_modules_{}_{}.tsv".format(dataset, algo)), sep='\t', error_bad_lines=False)
-    output_md = pd.read_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR,"evaluation","bg", "emp_diff_modules_{}_{}_md.tsv".format(dataset, algo)), sep='\t', error_bad_lines=False)
-
+    output=pd.read_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR,"bg","emp_diff_modules_{}_{}.tsv".format(dataset, algo)), sep='\t', error_bad_lines=False)
+    output_md = pd.read_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR,"md", "emp_diff_modules_{}_{}_md.tsv".format(dataset, algo)), sep='\t', error_bad_lines=False)
     if not "GO id" in output_md.columns:
         df_summary.loc[dataset, algo]="0/0=0"
-        return 
-
+        return
 
     output_md_ids=output_md.loc[np.logical_and.reduce([output_md["n_genes"].values > 5, output_md["n_genes"].values < 500])]['GO id']
     output=output.loc[output["GO id"].isin(output_md_ids.values)]
@@ -41,7 +39,7 @@ def false_positive_example(algo="jactivemodules_greedy",dataset="TNFa_2", result
     real_pvals["hg_pval_max"]=real_pvals["hg_pval_max"].values.astype(np.float)
     real_sig_ids = real_pvals[fdrcorrection0([10**-a for a in real_pvals["hg_pval_max"]], alpha=0.05, method='indep', is_sorted=False)[0]]["GO id"]
 
-    n_of_bg=10
+    n_of_bg=100
     n_intersections=[]
     n_sig_permuteds=[]
     n_sig_reals=[]
@@ -63,16 +61,16 @@ def false_positive_example(algo="jactivemodules_greedy",dataset="TNFa_2", result
 def calc_score(d,a,rs,ps,ins, df_summary):
     jaccards=[round(i/float(r+p+i+10e-7),2) for r,p,i in zip(rs,ps,ins)]
     if np.sum(rs)==0 and np.sum(ps)==0:
-        df_summary.loc[constants.ALGOS_ACRONYM[a],constants.DATASETS_ACRONYM[d]]=np.nan
+        df_summary.loc[constants.ALGOS_ACRONYM[a],d]=np.nan
     else:
-        df_summary.loc[constants.ALGOS_ACRONYM[a],constants.DATASETS_ACRONYM[d]]=1-np.mean(jaccards)
+        df_summary.loc[constants.ALGOS_ACRONYM[a],d]=1-np.mean(jaccards)
 
     # print constants.ALGOS_ACRONYM[a],constants.DATASETS_ACRONYM[d],rs,ps,ins,np.mean(jaccards)
 
 
-def plot_jaccards(df_summary, ax):
+def plot_jaccards(df_summary, algos, ax):
 
-    df_summary=df_summary.loc[constants.ALGOS_ACRONYM.values(),:]
+    df_summary=df_summary.loc[algos,:]
 
     ### heatmap ###
     # df_heatmap=pd.DataFrame(df_summary)
@@ -89,13 +87,13 @@ def plot_jaccards(df_summary, ax):
     jac_max = np.nanmax(df_summary)
     df_summary[np.isnan(df_summary)] = -1
     for a, jacs in df_summary.iterrows():
-        ax.scatter(constants.ALGOS_ACRONYM.values().index(a), 20,
+        ax.scatter(algos.index(a), 20,
                                  s=13200, c=(0, 0, 0, 1))
         for b, cur_jac in enumerate(jacs.sort_values(ascending=True)):
-            ax.scatter(constants.ALGOS_ACRONYM.values().index(a), 20,
+            ax.scatter(algos.index(a), 20,
                                  s=10000 * (1.1 - float(b) / len(jacs)) ** 2.5, c=(
                     cmap((cur_jac - jac_min) / (jac_max - jac_min)) if cur_jac != -1 else (0.8, 0.8, 0.8, 1)))
-    ax.set_xticklabels([""] + constants.ALGOS_ACRONYM.values(), rotation=20)
+    ax.set_xticklabels([""] + algos, rotation=20)
     ax.set_yticklabels(["" for a in ax.get_yticks()], rotation=20)
 
 
@@ -103,7 +101,8 @@ if __name__ == "__main__":
 
     fig, ax = plt.subplots(2,1,figsize=(20,10))
     fig.subplots_adjust(left=0.2, right=0.8, wspace=2)
-    for datasets, prefix, ax_index in [(["tnfa", "hc", "ror", "shera", "shezh", "ers", "iem", "apo", "cbx", "ift"], "GE", 0) , (["brca", "crh", "scz", "tri", "t2d", "cad", "cmd", "hgt", "amd", "af"], "PASCAL_SUM", 1)]:
+
+    for datasets, prefix, ax_index in [(["tnfa", "hc", "ror", "shera", "shezh", "ers", "iem", "apo", "cbx", "ift"], "GE", 0) , (["brca", "crh", "scz", "tri", "t2d", "cad", "bmd", "hgt", "amd", "af"], "PASCAL_SUM", 1)]:
         algos=["jactivemodules_greedy", "jactivemodules_sa", "bionet", "netbox", "keypathwayminer_INES_GREEDY","hotnet2"]
         ax[ax_index].set_facecolor('#ffffff')
         ax[ax_index].set_title(prefix if prefix=="GE" else "GWAS", fontdict={"size":30})
@@ -124,13 +123,12 @@ if __name__ == "__main__":
         for d,a,rs,ps,ins in results:
             calc_score(d,a,rs,ps,ins, df_summary)
         df_summary.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "evaluation", "figure_11_{}_matrix.tsv".format(prefix)), sep='\t')
-
-        df_summary=pd.read_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "evaluation", "figure_11_{}_matrix.tsv".format(prefix)), sep='\t', index_col=0)
-        plot_jaccards(df_summary, ax[ax_index])
+        plot_jaccards(df_summary, [constants.ALGOS_ACRONYM[a] for a in  algos], ax[ax_index])
 
     plt.tight_layout()
-    plt.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "evaluation","figure_11_visual.png".format(prefix)))
+    plt.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "plots","figure_11_heat.png".format(prefix)))
 
 
     # df_summary.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "figure_11_{}_matrix.tsv".format(prefix)), sep='\t', index_label="algo")
+
 

@@ -95,5 +95,5 @@ if __name__ == "__main__":
                      facecolor='#ffffff', ncol=2, prop={'size': font_size})
     figure.tight_layout()
     plt.subplots_adjust(left=0.05, right=0.95, top=0.8, bottom=0.05)
-    figure.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "figure_12_{}.png".format(prefix)) , bbox_extra_artists=(lgd,), bbox_inches='tight')
-    df_summary.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "figure_12_{}_matrix.tsv").format(prefix), sep='\t', index_label="algos")
+    figure.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "plots", "figure_12_{}.png".format(prefix)) , bbox_extra_artists=(lgd,), bbox_inches='tight')
+    df_summary.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "plots", "figure_12_{}_matrix.tsv").format(prefix), sep='\t', index_label="algos")

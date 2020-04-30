@@ -96,7 +96,7 @@ if __name__=="__main__":
     fig.text(0.01,0.97, "A:", weight='bold',fontsize=22)
     fig.text(0.5, 0.97, "B:", weight='bold',fontsize=22)
     fig.tight_layout()
-    fig.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "figure_15.png"))
+    fig.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "plots", "figure_15.png"))
 
     # fig_violin.text(0.0, 0.97, "A:", weight='bold', fontsize=22)
     # fig_violin.text(0.0, 0.5, "B:", weight='bold', fontsize=22)

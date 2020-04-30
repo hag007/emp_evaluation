@@ -151,7 +151,7 @@ if __name__=="__main__":
     plt.figtext(0.01, 0.5, "B:", weight='bold', fontsize=22)
     plt.figtext(0.5, 0.97, "C:", weight='bold', fontsize=22)
     plt.figtext(0.5, 0.5, "D:", weight='bold', fontsize=22)
-    plt.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "figure_14.png"))
+    plt.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "plots", "figure_14.png"))
 
 
 

@@ -121,7 +121,7 @@ def main():
                         facecolor='#ffffff', ncol=1, prop={'size': 14})
     fig.tight_layout()
     plt.subplots_adjust(left=0.07, right=0.95, top=0.95, bottom=0.07)
-    plt.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "figure_18_{}.png".format(prefix)))
+    plt.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "plots", "figure_18_{}.png".format(prefix)))
 
     fig, axs = plt.subplots(int(np.ceil(10.0 / 3)), 3, figsize=(20, 10.0*int(np.ceil(7.0/n_col))))
     prefix="PASCAL_SUM"
@@ -131,7 +131,7 @@ def main():
                         facecolor='#ffffff', ncol=1, prop={'size': 14})
     fig.tight_layout()
     plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.1)
-    plt.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "figure_18_{}.png".format(prefix)))
+    plt.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "plots", "figure_18_{}.png".format(prefix)))
 
 
 

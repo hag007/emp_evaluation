@@ -70,7 +70,7 @@ def main(prefix, algos, datasets):
                       markerfacecolor=constants.COLORDICT[a], alpha=0.7) for a in algos]
     fig.legend(handles=patches, fontsize=22, loc='lower right', ncol=3, facecolor='#ffffff')
     fig.tight_layout()
-    fig.savefig(os.path.join(base_folder, "aggregated_plot_{}.png".format(prefix)))
+    fig.savefig(os.path.join(constants, "plots", "aggregated_plot_{}.png".format(prefix)))
 
 
 if __name__ == "__main__":

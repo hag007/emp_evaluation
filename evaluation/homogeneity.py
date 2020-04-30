@@ -1,22 +1,16 @@
 import sys
 sys.path.insert(0, '../')
-
 import pandas as pd
-
 from fastsemsim.SemSim import *
-
 import constants
 import argparse
 import networkx as nx
-
 from modules_report import summarize_modules_ehr
 from utils.go_similarity import calc_intra_similarity
 
+
 def calc_homogeneity(cache_file, dataset=None, algo=None , base_folder=None, cutoff=1, module=[], pf=3, file_format = None, sim_method="Resnik"):
-
-
     print "current cur_algo: {}".format(algo)
-
     try:
         emp_results = pd.read_csv(
             os.path.join(base_folder,
@@ -29,7 +23,6 @@ def calc_homogeneity(cache_file, dataset=None, algo=None , base_folder=None, cut
     emp_results = emp_results.sort_values(by='emp_pval_max')
     emp_results_fdr = emp_results.dropna().loc[emp_results.dropna()["passed_oob_permutation_test"].apply(
     lambda a: np.any(np.array(a[1:-1].split(", ")) == "True")).values, :]
-
     all_go_terms = emp_results_fdr.index.values
 
     if len(all_go_terms) <=1:
@@ -41,7 +34,6 @@ def calc_homogeneity(cache_file, dataset=None, algo=None , base_folder=None, cut
 
     all_go_terms_r, all_go_terms_o, adj = calc_intra_similarity(all_go_terms, pf, emp_results_fdr, cache_file,
                                                                 sim_method, reduce_list=False)
-
     for k, v in adj.iteritems():
         if float(v) > 0:
             edges.append((k.split("_")[0], k.split("_")[1], float(v)))
@@ -76,7 +68,6 @@ def calc_homogeneity(cache_file, dataset=None, algo=None , base_folder=None, cut
 def main(prefix, base_folder, sim_method, file_format, pf, datasets, algos, cutoffs, recalc_module_report):
 
     h_scores = pd.DataFrame()
-
     if recalc_module_report:
         summarize_modules_ehr(prefix, datasets, algos, base_folder)
 
@@ -87,17 +78,6 @@ def main(prefix, base_folder, sim_method, file_format, pf, datasets, algos, cuto
             print "cur dataset: {}".format(cur_ds)
             for cur_alg in algos:
                 print "cur cutoff: {}, dataset: {}, algo: {}".format(cutoff, cur_ds, cur_alg)
-                # try:
-                #     emp_results = pd.read_csv(os.path.join(base_folder, file_format.format(cur_ds, cur_alg)), sep='\t', index_col=0)
-                #
-                # except:
-                #     print "could not find {}".format(os.path.join(base_folder, file_format.format(cur_ds, cur_alg)), cur_ds, cur_alg)
-                #     continue
-                #
-                # emp_results = emp_results.sort_values(by='emp_rank')
-                # emp_results_fdr = emp_results.dropna().loc[emp_results.dropna()["passed_oob_permutation_test"].apply(
-                #     lambda a: np.any(np.array(a[1:-1].split(", ")) == "True")).values, :]
-
                 module_indices=sorted([int(a.split("_")[-1]) for a in df_full_data.loc[(df_full_data['algo']== cur_alg).values & (df_full_data['dataset']== cur_ds).values & (df_full_data['EHR']>0.2).values].index.values])
                 for cur_module_index in module_indices:
                     go_set=df_full_data.loc["{}_{}_module_{}".format(cur_ds,cur_alg,cur_module_index), "tp"]
@@ -129,9 +109,8 @@ def main(prefix, base_folder, sim_method, file_format, pf, datasets, algos, cuto
                 df_homogeneity_avg.loc[cur_alg, cur_ds]=averaged_homogeneities[-1]
                 df_homogeneity_std.loc[cur_alg, cur_ds] = std_homogeneities[-1]
 
-        h_scores.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "h_scores_{}_{}.tsv".format(prefix,str(cutoff))), sep='\t')
-        df_homogeneity_avg.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "homogeneity_avg_matrix_{}_{}.tsv".format(prefix,str(cutoff))), sep='\t')
-
+        h_scores.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "evaluation", "h_scores_{}_{}.tsv".format(prefix,str(cutoff))), sep='\t')
+        df_homogeneity_avg.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "evaluation", "homogeneity_avg_matrix_{}_{}.tsv".format(prefix,str(cutoff))), sep='\t')
 
 if __name__ == "__main__":
 
@@ -147,7 +126,6 @@ if __name__ == "__main__":
     parser.add_argument('--recalc_module_report', dest='recalc_module_report', default="true") # 1.0,2.0,3.0,4.0  ,5.0,6.0,7.0,8.0,9.0,10.0,11.0
 
     args = parser.parse_args()
-
     prefix = args.prefix
     base_folder = args.base_folder
     sim_method= args.sim_method
@@ -158,13 +136,13 @@ if __name__ == "__main__":
     cutoffs = np.array(args.cutoffs.split(','),dtype=float)
     recalc_module_report=args.recalc_module_report=="true"
 
-    datasets=["tnfa", "hc", "ror", "shera", "shezh", "ers", "iem", "apo", "cbx", "ift"] # , "brca", "crh", "scz", "tri", "t2d", "cad", "bmd", "hgt", "amd", "af"]
-    algos=["DOMINO", "netbox", "jactivemodules_greedy"]
-    prefix ="GE"
+    datasets=["tnfa", "hc", "ror", "shera", "shezh", "ers", "iem", "apo", "cbx", "ift"] 
+    algos=["DOMINO", "netbox", "jactivemodules_greedy", "jactivemodules_sa", "bionet", "keypathwayminer_INES_GREEDY", "hotnet2"] 
+    prefix="GE"
     main(prefix, base_folder, sim_method, file_format, pf, datasets, algos, cutoffs, recalc_module_report)
 
     datasets=["brca", "crh", "scz", "tri", "t2d", "cad", "bmd", "hgt", "amd", "af"]
-    algos=["netbox", "DOMINO", "jactivemodules_greedy"] # ["jactivemodules_greedy", "jactivemodules_sa", "bionet", "netbox", "keypathwayminer_INES_GREEDY"]
+    algos=["DOMINO", "netbox", "jactivemodules_greedy", "jactivemodules_sa", "bionet", "keypathwayminer_INES_GREEDY", "hotnet2"]
     prefix="PASCAL_SUM"
     main(prefix, base_folder, sim_method, file_format, pf, datasets, algos, cutoffs, recalc_module_report)
 

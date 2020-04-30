@@ -213,12 +213,12 @@ def main():
     # fig_4.text(0.01, 0.49, "C", weight='bold',fontsize=22)
     # fig_4.text(0.51, 0.49, "D", weight='bold',fontsize=22)
     fig_4.tight_layout()
-    fig_4.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "figure_4.png"))
+    fig_4.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "plots", "figure_4.png"))
 
     # fig_5.text(0.01, 0.97, "A", weight='bold', fontsize=22)
     # fig_5.text(0.5, 0.97, "B", weight='bold', fontsize=22)
     fig_5.tight_layout()
-    fig_5.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "figure_5.png"))
+    fig_5.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "plots", "figure_5.png"))
 
 if __name__=="__main__":
     main()
