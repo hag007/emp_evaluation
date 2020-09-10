@@ -1,3 +1,7 @@
+import sys
+sys.path.insert(0,'../')
+import matplotlib
+matplotlib.use('Agg')
 import pandas as pd
 from fastsemsim.SemSim import *
 import matplotlib.pyplot as plt
@@ -53,7 +57,7 @@ def plot_single_ax(ax, file_name_x, file_name_y, title, x_label, y_label, x_agg_
     df_total.loc[:, "{}_{}_{}".format(y_label, "std", title.split(',')[1].strip())] = df_measurements_y.T.std()
 
 
-def main():
+def main(algos):
     df_total=pd.DataFrame(index=constants.ALGOS)
     source_folder= os.path.join(constants.OUTPUT_GLOBAL_DIR, "evaluation")
     output_folder= os.path.join(constants.OUTPUT_GLOBAL_DIR, "plots")
@@ -88,21 +92,6 @@ def main():
              title, x_label, y_label, fig_suffix, axs[0], df_total=df_total)
 
 
-    # file_name_x_ge = "ratio_matrix.tsv"
-    # file_name_y_ge = "count_matrix.tsv"
-    # file_name_x_gwas = "ratio_matrix.tsv"
-    # file_name_y_gwas = "count_matrix.tsv" # ""recovery_results_PASCAL_SUM_100_0.3.tsv"
-    # x_label = "EHR"
-    # y_label = "term count"
-    # title = "{} vs {}".format(x_label,y_label)
-    # fig_suffix=2
-    # fig, axs = plt.subplots(2, 2, figsize=(25, 25))
-    #
-    # plot_given_fig(os.path.join(main_ge_folder, file_name_x_ge), os.path.join(main_ge_folder, file_name_y_ge),
-    #          os.path.join(main_gwas_folder, file_name_x_gwas), os.path.join(main_gwas_folder, file_name_y_gwas),
-    #          title, x_label, y_label, fig_suffix, axs[0], df_total=df_total)
-
-
     file_name_y_ge = "robustness_auc_GE_100_0.2.tsv"
     file_name_y_gwas = "robustness_auc_PASCAL_SUM_100_0.2.tsv" # ""recovery_results_PASCAL_SUM_100_0.3.tsv"
     y_label = "Robustness (AUPR)"
@@ -111,14 +100,6 @@ def main():
     plot_given_fig(os.path.join(source_folder, file_name_x_ge), os.path.join(source_folder, file_name_y_ge),
                    os.path.join(source_folder, file_name_x_gwas), os.path.join(source_folder, file_name_y_gwas),
                    title, x_label, y_label, fig_suffix, axs[1], df_total=df_total)
-
-
-    fig.text(0.01, 0.97, "A:", weight='bold', fontsize=22)
-    fig.text(0.5, 0.97, "B:", weight='bold', fontsize=22)
-    fig.text(0.01, 0.5, "C:", weight='bold', fontsize=22)
-    fig.text(0.5, 0.5, "D:", weight='bold', fontsize=22)
-    fig.tight_layout()
-    fig.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "figure_agg_{}.png".format(fig_suffix)))
 
 
     file_name_x_ge = "ehr_matrix_GE.tsv"
@@ -161,28 +142,28 @@ def main():
              os.path.join(source_folder, file_name_x_gwas), os.path.join(source_folder, file_name_y_gwas),
              title, x_label, y_label, fig_suffix, df_total=df_total)
 
+    df_total=df_total.loc[algos,:].round(3)
+
     omic="GE"
-    algos=["jactivemodules_greedy", "jactivemodules_sa", "netbox", "bionet", "keypathwayminer_INES_GREEDY", "DOMINO", "hotnet2"]
     agg_type=["mean", "median"]
-    df_total_tmp=df_total.loc[algos,[a for a in df_total.columns if omic in a and any([b in a for b in agg_type])]]
+    df_total_tmp=df_total.loc[:,[a for a in df_total.columns if omic in a and any([b in a for b in agg_type])]]
     df_total_tmp=df_total_tmp.rename(columns={a:a.split("_")[0] for a in df_total_tmp}, index={a: constants.ALGOS_ACRONYM[a] for a in algos})
     df_total_tmp=df_total_tmp.apply(lambda a: a.apply(lambda b: '%.2E' % b))
     df_total_tmp.to_csv(os.path.join(output_folder, "criteria_summary_{}_{}_{}.tsv".format(agg_type[0],omic, cutoff)), sep='\t')
     agg_type=["std"]
-    df_total_tmp=df_total.loc[algos,[a for a in df_total.columns if omic in a and any([b in a for b in agg_type])]]
+    df_total_tmp=df_total.loc[:,[a for a in df_total.columns if omic in a and any([b in a for b in agg_type])]]
     df_total_tmp=df_total_tmp.rename(columns={a:a.split("_")[0] for a in df_total_tmp}, index={a: constants.ALGOS_ACRONYM[a] for a in algos})
     df_total_tmp=df_total_tmp.apply(lambda a: a.apply(lambda b: '%.2E' % b))
     df_total_tmp.to_csv(os.path.join(output_folder, "criteria_summary_{}_{}_{}.tsv".format(agg_type[0],omic, cutoff)), sep='\t')
 
     omic="GWAS"
-    algos=["jactivemodules_greedy", "jactivemodules_sa", "netbox", "bionet", "keypathwayminer_INES_GREEDY", "DOMINO", "hotnet2"]
     agg_type=["mean", "median"]
-    df_total_tmp=df_total.loc[algos,[a for a in df_total.columns if omic in a and any([b in a for b in agg_type])]]
+    df_total_tmp=df_total.loc[:,[a for a in df_total.columns if omic in a and any([b in a for b in agg_type])]]
     df_total_tmp=df_total_tmp.rename(columns={a:a.split("_")[0] for a in df_total_tmp}, index={a: constants.ALGOS_ACRONYM[a] for a in algos})
     df_total_tmp=df_total_tmp.apply(lambda a: a.apply(lambda b: '%.2E' % b))
     df_total_tmp.to_csv(os.path.join(output_folder, "criteria_summary_{}_{}_{}.tsv".format(agg_type[0],omic, cutoff)), sep='\t')
     agg_type=["std"]
-    df_total_tmp=df_total.loc[algos,[a for a in df_total.columns if omic in a and any([b in a for b in agg_type])]]
+    df_total_tmp=df_total.loc[:,[a for a in df_total.columns if omic in a and any([b in a for b in agg_type])]]
     df_total_tmp=df_total_tmp.rename(columns={a:a.split("_")[0] for a in df_total_tmp}, index={a: constants.ALGOS_ACRONYM[a] for a in algos})
     df_total_tmp=df_total_tmp.apply(lambda a: a.apply(lambda b: '%.2E' % b))
     df_total_tmp.to_csv(os.path.join(output_folder, "criteria_summary_{}_{}_{}.tsv".format(agg_type[0],omic, cutoff)), sep='\t')
@@ -205,6 +186,3 @@ def main():
     df_total_gwas_std=df_total_gwas_std.rename(columns={a: a.split("_")[0] for a in df_total_gwas_std.columns})
     df_total_gwas_std.to_csv(os.path.join(output_folder, "aggergated_criteria_summary_{}_{}_{}.tsv".format("gwas","std", cutoff)), sep='\t')
 
-
-if __name__=="__main__":
-    main()

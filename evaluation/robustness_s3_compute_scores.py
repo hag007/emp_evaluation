@@ -1,6 +1,5 @@
 import sys
-
-sys.path.insert(0, '../../')
+sys.path.insert(0, '../')
 import os
 import constants
 
@@ -11,12 +10,10 @@ import argparse
 from sklearn.metrics import average_precision_score
 from sklearn.metrics import precision_recall_curve
 
-
 def main(prefix,datasets,algos,n_start,n_end,ss_ratios):
-    filtered_go_ids_file = os.path.join(constants.GO_DIR, "filtered_go_terms.txt")
-    filtered_go_ids = open(filtered_go_ids_file, 'r').read().split() + ["GO:0008150"]
     for ss_ratio in ss_ratios:
         df_pr_auc = pd.DataFrame()
+
         for dataset in datasets:
             for algo in algos:
                 df_detailed_pr_agg = pd.DataFrame()
@@ -31,7 +28,8 @@ def main(prefix,datasets,algos,n_start,n_end,ss_ratios):
                                          "df_detailed_pr.tsv"),
                             sep='\t', index_col=0)
                     except IOError, e:
-                        print "error: {}".format(e)
+                        print e
+                        print "continue..."
                         continue
 
                     df_detailed_pr_pval_agg = pd.concat([df_detailed_pr_pval_agg, df_detailed_pr['pval']], axis=1)
@@ -42,12 +40,16 @@ def main(prefix,datasets,algos,n_start,n_end,ss_ratios):
                     ehr_terms = pd.read_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "oob",
                                                          "emp_diff_modules_{}_{}_passed_oob.tsv".format(dataset, algo)),
                                             sep='\t')
+                except Exception as e:
+                    print("error: {}".format(e))
+                    continue
+
+                try:
                     ehr_terms = ehr_terms.loc[ehr_terms["passed_oob_permutation_test"].dropna(axis=0).apply(
                         lambda a: np.any(np.array(a[1:-1].split(", ")) == "True")).values, :].sort_values(
                         by=["hg_pval_max"], ascending=False)['GO id']
-                except Exception as e:
+                except KeyError, e:
                     ehr_terms = pd.Series()
-                    pass
 
                 print "intersected terms: {}/{}".format(len(set(ehr_terms).intersection(df_detailed_pr_pval_agg.index)),
                                                         len(ehr_terms.index))
@@ -94,7 +96,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='args')
     parser.add_argument('--datasets', dest='datasets', default="brca")
-    parser.add_argument('--algos', dest='algos', default="DOMINO2")
+    parser.add_argument('--algos', dest='algos', default="DOMINO")
     parser.add_argument('--prefix', dest='prefix', default="GE")
     parser.add_argument('--n_start', help="number of iterations (total n permutation is pf*(n_end-n_start))",
                         dest='n_start', default=0)
@@ -111,3 +113,4 @@ if __name__ == "__main__":
     prefix = args.prefix
     ss_ratios = [float(a) for a in args.ss_ratios.split(",")]
     main(prefix,datasets,algos,n_start,n_end,ss_ratios)
+

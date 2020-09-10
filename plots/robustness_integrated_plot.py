@@ -1,3 +1,9 @@
+import sys
+sys.path.insert(0,'../')
+
+import matplotlib
+matplotlib.use('Agg')
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -7,13 +13,12 @@ import constants
 from matplotlib.lines import Line2D
 
 
-def plot_itegrated_recovery(ss_ratios, base_folder, average_file_format, auc_file_format, p_file_format, r_file_format, f1_file_format, empty_file_format, zero_file_name, suffix, axs, title="", algos=constants.ALGOS_ACRONYM.keys(), datasets=[]):
+def plot_itegrated_recovery(ss_ratios, base_folder, auc_file_format, p_file_format, r_file_format, f1_file_format, zero_file_name, suffix, axs, title="", algos=constants.ALGOS_ACRONYM.keys(), datasets=[]):
 
     axs[0].set_facecolor('#ffffff')
     axs[0].grid(color='gray')
     axs[1].set_facecolor('#ffffff')
     axs[1].grid(color='gray')
-      #
 
     ps = pd.DataFrame()
     rs = pd.DataFrame()
@@ -28,65 +33,44 @@ def plot_itegrated_recovery(ss_ratios, base_folder, average_file_format, auc_fil
         df_zeros = pd.read_csv(zero_file_name, sep='\t', index_col=0).loc[pd.read_csv(os.path.join(base_folder, p_file_format.format(suffix, cur_ss_ratio)), sep='\t',
                         index_col=0).index]
         df_zeros.loc[:,:] = 1
-        n_iterations = 100 # len(
-            # pd.read_csv(os.path.join(base_folder, average_file_format.format(suffix, cur_ss_ratio)), sep='\t',
-            #             index_col=0)["precisions"][0][1:-1].split(", "))
+        n_iterations = 100
         print "n_iteration for ss_ratio={}: {}".format(cur_ss_ratio, n_iterations)
         df_cur_pr = pd.read_csv(os.path.join(base_folder, auc_file_format.format(suffix, cur_ss_ratio)), sep='\t',
-                                index_col=0).loc[:,datasets]#[~np.logical_or(df_zeros == 0, np.isnan(df_zeros))]
+                                index_col=0).loc[:,datasets]
 
         df_cur_pr[pd.isnull(df_cur_pr)]=0
         df_cur_pr=df_cur_pr.mean(axis=1)
         df_cur_p = pd.read_csv(os.path.join(base_folder, p_file_format.format(suffix, cur_ss_ratio)), sep='\t',
-                               index_col=0).loc[:,datasets]#[~np.logical_or(df_zeros == 0, np.isnan(df_zeros))]
+                               index_col=0).loc[:,datasets]
 
         df_cur_p[pd.isnull(df_cur_p)]=0
         df_cur_p=df_cur_p.mean(axis=1)
         df_cur_r = pd.read_csv(os.path.join(base_folder, r_file_format.format(suffix, cur_ss_ratio)), sep='\t',
-                               index_col=0).loc[:,datasets]#[~np.logical_or(df_zeros == 0, np.isnan(df_zeros))]
+                               index_col=0).loc[:,datasets]
 
         df_cur_r[pd.isnull(df_cur_r)]=0
         df_cur_r=df_cur_r.mean(axis=1)
         df_cur_f1 = pd.read_csv(os.path.join(base_folder, f1_file_format.format(suffix, cur_ss_ratio)), sep='\t',
-                                index_col=0).loc[:,datasets]#[~np.logical_or(df_zeros == 0, np.isnan(df_zeros))]
+                                index_col=0).loc[:,datasets]
 
         df_cur_f1[pd.isnull(df_cur_f1)]=0
         df_cur_f1=df_cur_f1.mean(axis=1)
-        df_cur_empty = pd.read_csv(os.path.join(base_folder, empty_file_format.format(suffix, cur_ss_ratio)), sep='\t',
-                                   index_col=0).loc[:,datasets]#[~np.logical_or(df_zeros == 0, np.isnan(df_zeros))].mean(axis=1) / float(n_iterations)
-
-        df_cur_empty[pd.isnull(df_cur_empty)]=0
-        df_cur_empty=df_cur_empty.mean(axis=1)
 
 
         prs = pd.concat([prs, df_cur_pr], axis=1)
         ps = pd.concat([ps, df_cur_p], axis=1)
         rs = pd.concat([rs, df_cur_r], axis=1)
         f1s = pd.concat([f1s, df_cur_f1], axis=1)
-        empties = pd.concat([empties, df_cur_empty], axis=1)
 
     prs = prs.loc[np.sort(ps.index.values)]
     ps = ps.loc[np.sort(ps.index.values)]
     rs = rs.loc[np.sort(ps.index.values)]
     f1s = f1s.loc[np.sort(ps.index.values)]
-    empties = empties.loc[np.sort(ps.index.values)]
 
 
     patches_0 = [Line2D([0], [0], marker='o', color='gray', label=constants.ALGOS_ACRONYM[a], markersize=12, markerfacecolor=constants.COLORDICT[a], alpha=0.7) for a in algos] # + \
-                # [Line2D([0], [0], linestyle='-', color='black', label='AUPR', markersize=12, markerfacecolor='gray',
-               # alpha=0.7)] + \
-               #  [Line2D([0], [0], linestyle=(0, (5, 10)), color='black', label='fraction of\nnon-empty solutions', markersize=12,
-               # markerfacecolor='gray', alpha=0.7)]
 
     patches_1 = [Line2D([0], [0], marker='o', color='gray', label=constants.ALGOS_ACRONYM[a], markersize=12, markerfacecolor=constants.COLORDICT[a], alpha=0.7) for a in algos]
-        # + [
-        # Line2D([0], [0], linestyle='-', linewidth=3.0, color='black', label='f1', markersize=12, markerfacecolor='gray',
-        #        alpha=0.7)]+ \
-        #         [Line2D([0], [0], linestyle='dashed', color='black', label='precision', markersize=12, markerfacecolor='gray',
-        #        alpha=0.7)] + \
-        #         [Line2D([0], [0], linestyle='dotted', color='black', label='recall', markersize=12,
-        #                           markerfacecolor='gray', alpha=0.7)]
-
     ss_ratios = 1 - np.array(ss_ratios)
 
     prs.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR,"prs_{}.tsv".format(title)), sep='\t')
@@ -95,18 +79,11 @@ def plot_itegrated_recovery(ss_ratios, base_folder, average_file_format, auc_fil
 
 
     for cur in set(prs.index).intersection(constants.ALGOS):
-        # if prs.index[cur_i] == "my_netbox_td": continue
         axs[0].plot([a for a,b in zip(ss_ratios,prs.loc[cur]) if not np.isnan(b)], [a for a in prs.loc[cur] if not np.isnan(a) ], c=constants.COLORDICT[cur])
-        # axs[0].plot(ss_ratios, empties.loc[cur], c=constants.COLORDICT[cur], linestyle=(0, (5, 10)), linewidth=3.0)
-        # plt.plot(ss_ratios, np.multiply(empties.iloc[cur_i] / 100.0, prs.iloc[cur_i]) , c=colorlist[cur_i], linestyle='dashed')
-        # axs[1].plot(ss_ratios, ps.iloc[cur_i], c=colorlist[cur_i], linestyle='dashed')
-        # axs[1].plot(ss_ratios, rs.iloc[cur_i], c=colorlist[cur_i], linestyle='dotted')
         axs[1].plot(ss_ratios, f1s.loc[cur], c=constants.COLORDICT[cur], linewidth=2.0)
 
     axs[0].set_xlabel("subsample fraction", fontsize=22)
     axs[0].set_ylabel("AUPR", fontsize=22)
-    # ax2 = axs[0].twinx()
-    # ax2.set_ylabel("Fration of non-empty iterations", fontsize=22)  #
     axs[0].set_title(title, fontdict={"size":22})
 
     axs[1].set_xlabel("subsample fraction", fontsize=22)
@@ -134,16 +111,17 @@ if __name__=="__main__":
     prefix="GE"
     suffix = "{}_100".format(prefix)
     zeros_file_name =  zeros_file_format.format(prefix)
-    algos = ["jactivemodules_greedy", "jactivemodules_sa", "bionet", "netbox", "keypathwayminer_INES_GREEDY", "DOMINO", "hotnet2"]
+    algos = ['DOMINO4', 'netbox2_string']
     datasets = ["tnfa", "hc", "ror", "shera", "shezh", "ers", "iem", "apo", "cbx", "ift"]
-    plot_itegrated_recovery(ss_ratios, base_folder, average_file_format, auc_file_format, p_file_format, r_file_format, f1_file_format, empty_file_format, zeros_file_name, suffix, axs=axs[:,0], title="GE", algos=algos, datasets=datasets)
+    plot_itegrated_recovery(ss_ratios, base_folder, auc_file_format, p_file_format, r_file_format, f1_file_format, zeros_file_name, suffix, axs=axs[:,0], title="GE", algos=algos, datasets=datasets)
+
     prefix = "PASCAL_SUM"
     suffix = "{}_100".format(prefix)
     zeros_file_name =  zeros_file_format.format(prefix)
-    algos = ["jactivemodules_greedy", "jactivemodules_sa", "bionet", "netbox", "keypathwayminer_INES_GREEDY", "DOMINO", "hotnet2"]
+    algos = ['DOMINO4', 'netbox2_string']
     datasets = ["brca", "crh", "scz", "tri", "t2d", "cad", "bmd", "hgt", "amd", "af"]
-    plot_itegrated_recovery(ss_ratios, base_folder, average_file_format, auc_file_format, p_file_format, r_file_format,
-                            f1_file_format, empty_file_format, zeros_file_name, suffix, axs=axs[:,1], title="GWAS", algos=algos, datasets=datasets)
+    plot_itegrated_recovery(ss_ratios, base_folder, auc_file_format, p_file_format, r_file_format,
+                            f1_file_format, zeros_file_name, suffix, axs=axs[:,1], title="GWAS", algos=algos, datasets=datasets)
 
 
     plt.tight_layout()

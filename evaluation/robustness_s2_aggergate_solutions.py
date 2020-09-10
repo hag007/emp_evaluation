@@ -13,19 +13,21 @@ from utils.add_GO_terms_metadata_agg import get_all_genes_for_term, vertices
 import multiprocessing
 
 
-def get_enriched_terms(algos, datasets, filtered_go_ids, hg_th):
+
+def get_enriched_terms(algos, datasets):
     for cur_algo in algos:
+        algos_filter = cur_algo
+
         df_go = pd.DataFrame(columns=['GO id', 'qval', 'pval'])
         df_go_pvals = pd.DataFrame()
         df_go_pvals.index.name = "GO id"
         for cur_ds in datasets:
             try:
-                go_results = [os.path.join(constants.ROBUSTNESS_SOLUTIONS_DIR, cur_ds, "report", a) for a in
-                              os.listdir(os.path.join(constants.ROBUSTNESS_SOLUTIONS_DIR, cur_ds, "report"))
-                              if "separated_modules" in a]
-            except Exception as e:
-                print "error: {}".format(e)
-                go_results = []
+                go_results = [os.path.join(constants.ROBUSTNESS_SOLUTIONS_DIR, cur_ds, "report", a) for a in os.listdir(os.path.join(constants.ROBUSTNESS_SOLUTIONS_DIR, cur_ds, "report"))
+                          if "separated_modules" in a]
+            except OSError as e:
+                print("error: {}".format(e))
+                go_results=[]
 
             for cur in go_results:
                 try:
@@ -44,12 +46,13 @@ def get_enriched_terms(algos, datasets, filtered_go_ids, hg_th):
                    enumerate(df_go_pvals.index.values)]
         n_genes_series = pd.Series(n_genes, index=df_go_pvals.index)
 
+        filtered_go_sets = n_genes_series.loc[
+            np.logical_and.reduce([n_genes_series.values > 5, n_genes_series.values < 500])].index.values
+        df_go_pvals = df_go_pvals[df_go_pvals.index.isin(filtered_go_sets)]
 
-        df_go_pvals = df_go_pvals.reindex(filtered_go_ids).dropna()
-
-        print "total n_genes with pval:{}/{}".format(np.size(df_go_pvals), len(filtered_go_ids))
-        hg_pvals = np.append(df_go_pvals, np.ones(len(filtered_go_ids) - np.size(df_go_pvals)))
-        fdr_results = fdrcorrection0(hg_pvals, alpha=hg_th, method='indep', is_sorted=False)[0]
+        print "total n_genes with pval:{}/{}".format(np.size(df_go_pvals), 7435)
+        hg_pvals = np.append(df_go_pvals, np.ones(7435 - np.size(df_go_pvals)))
+        fdr_results = fdrcorrection0(hg_pvals, alpha=0.05, method='indep', is_sorted=False)[0]
         if np.sum(fdr_results) > 0:
             fdr_th = np.max(hg_pvals[fdr_results])
         else:
@@ -68,54 +71,56 @@ def get_enriched_terms(algos, datasets, filtered_go_ids, hg_th):
 
 
 def aggregate_solutions(dataset, cur, algo,
-                        base_folder=None, filtered_go_ids=[], ss_ratio=0.4, precisions=None,
-                        recalls=None, hg_th=0.05):
+                        base_folder=None, ss_ratio=0.4, precisions=None,
+                        recalls=None):
     print "starting iteration: {}, {}".format(dataset, cur)
     try:
         recovered_dataset_name = "sol_{}_{}_robustness_{}_{}".format(algo, dataset, cur, ss_ratio)
 
-        cur_pval, df_terms, df_pval_terms = get_enriched_terms([algo], [recovered_dataset_name], filtered_go_ids, hg_th)
+        cur_pval, df_terms, df_pval_terms = get_enriched_terms([algo], [recovered_dataset_name])
 
-        df = pd.read_csv(
-            os.path.join(base_folder, "oob", "emp_diff_modules_{}_{}_passed_oob.tsv".format(dataset, algo)),
-            sep='\t').sort_values(by=["hg_pval_max"], ascending=False)
+        df = pd.read_csv(os.path.join(base_folder, "oob", "emp_diff_modules_{}_{}_passed_oob.tsv".format(dataset, algo)),
+                         sep='\t')
+
         full_sig_terms = df.loc[df["passed_oob_permutation_test"].dropna(axis=0).apply(
             lambda a: np.any(np.array(a[1:-1].split(", ")) == "True")).values, :].sort_values(by=["hg_pval_max"],
                                                                                               ascending=False)['GO id']
     except Exception as e:
-        print("error: {}".format(e))
+        print e
         full_sig_terms = np.array([])
 
-    df_detailed_pr = df_pval_terms.to_frame().rename(columns={0: 'pval'})
+    df_detailed_pr = df_pval_terms.to_frame().rename(columns= {0: 'pval'})
     df_detailed_pr.columns
     df_detailed_pr['is_significant'] = df_detailed_pr.index.isin(full_sig_terms)
 
-    if not os.path.exists(os.path.join(constants.ROBUSTNESS_SOLUTIONS_DIR, recovered_dataset_name)):
-        os.makedirs(os.path.join(constants.ROBUSTNESS_SOLUTIONS_DIR, recovered_dataset_name))
-    else:
-        df_detailed_pr.to_csv(
-            os.path.join(constants.ROBUSTNESS_SOLUTIONS_DIR, recovered_dataset_name, "df_detailed_pr.tsv"), sep='\t')
+    try:
+         df_detailed_pr.to_csv(os.path.join(constants.ROBUSTNESS_SOLUTIONS_DIR, recovered_dataset_name, "df_detailed_pr.tsv"),  sep='\t')
+    except OSError as e:
+         pass 
+    
+
 
     recall = len(set(full_sig_terms).intersection(df_pval_terms.index.values)) / float(max(1, len(full_sig_terms)))
     precision = len(set(full_sig_terms).intersection(df_pval_terms.index.values)) / float(
         max(1, df_pval_terms.shape[0]))
-    print "precision: {}/{}={}".format(len(set(full_sig_terms).intersection(df_pval_terms.index.values)),
-                                                float(df_pval_terms.shape[0]), precision)
-    print "recall: {}/{}={}".format(len(set(full_sig_terms).intersection(df_pval_terms.index.values)),
-                                             float(len(full_sig_terms)), recall)
+    print "precision: {}/{}={} ({}, {})".format(len(set(full_sig_terms).intersection(df_pval_terms.index.values)),
+                                                float(df_pval_terms.shape[0]), precision, len(set(full_sig_terms)),
+                                                len(set(df_pval_terms.index.values)))
+    print "recall: {}/{}={} ({}, {})".format(len(set(full_sig_terms).intersection(df_pval_terms.index.values)),
+                                             float(len(full_sig_terms)), recall, len(set(full_sig_terms)),
+                                             len(set(df_pval_terms.index.values)))
     print "done iteration: {}, {}".format(dataset, cur)
-
+    # if precisions is not None:
     precisions.append(precision)
     recalls.append(recall)
     return precision, recall
 
 
-def main(prefix, datasets, algos, parallelization_factor, n_start, n_end, ss_ratios, hg_th, base_folder):
-    filtered_go_ids_file = os.path.join(constants.GO_DIR, "filtered_go_terms.txt")
-    filtered_go_ids = open(filtered_go_ids_file, 'r').read().split() + ["GO:0008150"]
+def main(prefix, datasets, algos, parallelization_factor, n_start, n_end, ss_ratios, base_folder):
     for ss_ratio in ss_ratios:
         df = pd.DataFrame()
         for dataset in datasets:
+
             p_means = []
             p_stds = []
             r_means = []
@@ -128,7 +133,7 @@ def main(prefix, datasets, algos, parallelization_factor, n_start, n_end, ss_rat
                 p = MyPool(parallelization_factor)
 
                 params = [[aggregate_solutions,
-                           [dataset, x, algo, base_folder, filtered_go_ids, ss_ratio, precisions, recalls, hg_th]] for x
+                           [dataset, x, algo, base_folder, ss_ratio, precisions, recalls]] for x
                           in np.arange(int(n_start), int(n_end))]
                 p.map(func_star, params)
                 p.close()
@@ -147,10 +152,11 @@ def main(prefix, datasets, algos, parallelization_factor, n_start, n_end, ss_rat
                                 "f1_std": f1_stds[-1],
                                 "algo": algo, "dataset": dataset, "ss_ratio": ss_ratio}, ignore_index=True)
 
-        df.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "evaluation",
-                               "robustness_f1_{}_{}_{}.tsv".format(prefix, n_end, ss_ratio)), sep='\t')
-        print "save file to: {}".format(os.path.join(constants.OUTPUT_GLOBAL_DIR,
-                                                     "robustness_results_{}_{}_{}.tsv".format(prefix, n_end, ss_ratio)))
+                df.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "evaluation",
+                                       "robustness_f1_{}_{}_{}.tsv".format(prefix, n_end, ss_ratio)), sep='\t')
+                print "save file to: {}".format(os.path.join(constants.OUTPUT_GLOBAL_DIR,
+                                                             "robustness_results_{}_{}_{}.tsv".format(prefix, n_end,
+                                                                                                      ss_ratio)))
 
 
 if __name__ == "__main__":
@@ -158,10 +164,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='args')
     parser.add_argument('--prefix', dest='prefix', default="GE")
     parser.add_argument('--datasets', dest='datasets', default="brca")
-    parser.add_argument('--algos', dest='algos', default="DOMINO2")
+    parser.add_argument('--algos', dest='algos', default="DOMINO")
     parser.add_argument('--network', dest='network', default="dip.sif")
     parser.add_argument('--pf', help="parallelization_factor", dest='pf', default=10)
-    parser.add_argument('--hg_th', help="hg_th", dest='hg_th', default=0.05)
     parser.add_argument('--n_start_r', help="number of iterations (total n permutation is pf*(n_end-n_start))",
                         dest='n_start_r', default=0)
     parser.add_argument('--n_end_r', help="number of iterations (total n permutation is pf*(n_end-n_start))",
@@ -177,11 +182,11 @@ if __name__ == "__main__":
     algos = args.algos.split(",")
     network_file_name = args.network
     parallelization_factor = int(args.pf)
-    hg_th = float(args.hg_th)
     n_start = int(args.n_start_r)
     n_end = int(args.n_end_r)
     ss_ratios = [float(a) for a in args.ss_ratios.split(",")]
     override_permutations = args.override_permutations.lower() == "true"
     base_folder = args.base_folder
-    main(prefix, datasets, algos, parallelization_factor, n_start, n_end, ss_ratios, hg_th, base_folder)
+    main(prefix, datasets, algos, parallelization_factor, n_start, n_end, ss_ratios, base_folder)
+
 

@@ -68,7 +68,7 @@ def count_empties(prefix, dataset, cur, algo, ss_ratio=0.4, empties=None):
         empties.append(False)
 
 
-def main(prefix, datasets, algos, parallelization_factor,n_start,n_end,ss_ratios):
+def main(datasets, algos, prefix,parallelization_factor,n_start,n_end,ss_ratios):
     for ss_ratio in ss_ratios:
 
         df_empties = pd.DataFrame()

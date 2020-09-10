@@ -1,5 +1,7 @@
 import sys
 sys.path.insert(0, '../')
+import matplotlib
+matplotlib.use('Agg')
 
 import pandas as pd
 
@@ -65,9 +67,6 @@ def main(algos=None, datasets=None, prefix="", cutoffs=[1.0, 2.0, 3.0, 4.0, 5.0]
 
         ax.plot(cutoffs,y_median,label=constants.ALGOS_ACRONYM[k], c=constants.COLORDICT[k])
 
-        # for x, y, std in zip(cutoffs, ys, stds):
-        #     ax.errorbar(x - 0.15 + 0.05 * i, y, yerr=std, linestyle='None', marker='^', c=colorlist[i])
-
         i += 1
 
     df_std.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR,"biological_richness_std_{}.tsv".format(prefix)), sep='\t')
@@ -77,6 +76,8 @@ def main(algos=None, datasets=None, prefix="", cutoffs=[1.0, 2.0, 3.0, 4.0, 5.0]
     ax.set_xlabel("similarity cutoff", fontdict={"size": 22})
     ax.set_ylabel("median # of non-redundant EV terms", fontdict={"size": 22})
     ax.set_title(title, fontdict={"size":22})
+    patches = [Line2D([0], [0], marker='o', color='gray', label=constants.ALGOS_ACRONYM[a], markersize=12,
+                      markerfacecolor=constants.COLORDICT[a], alpha=0.7) for a in algos]
     ax.legend(fontsize=17, loc=(0,1.1), ncol=2, facecolor='#ffffff')
 
 
@@ -105,22 +106,5 @@ if __name__ == "__main__":
 
     fig, axs = plt.subplots(1,2,figsize=(20,10))
     fig_violin, axs_violin = plt.subplots(2,len(cutoffs),figsize=(4*len(cutoffs)*2,10))
-    datasets = ["tnfa", "hc", "ror", "shera", "shezh", "ers", "iem", "apo", "cbx", "ift"]
-    algos = ["DOMINO", "netbox", "jactivemodules_greedy", "jactivemodules_sa", "bionet", "keypathwayminer_INES_GREEDY", "hotnet2"]
-    prefix = "GE"
+
     main(algos=algos, datasets=datasets, prefix=prefix, cutoffs=cutoffs, ax=axs[0], axs_violin=axs_violin[0], title="GE")
-
-    datasets = ["brca", "crh", "scz", "tri", "t2d", "cad", "bmd", "hgt", "amd", "af"]
-    algos = ["DOMINO", "netbox", "jactivemodules_greedy", "jactivemodules_sa", "bionet", "keypathwayminer_INES_GREEDY", "hotnet2"]
-    prefix = "PASCAL_SUM"
-    main(algos=algos, datasets=datasets, prefix=prefix, cutoffs=cutoffs, ax=axs[1], axs_violin=axs_violin[1], title="GWAS")
-
-    fig.text(0.01, 0.97, "A:", weight='bold', fontsize=22)
-    fig.text(0.5, 0.97, "B:", weight='bold', fontsize=22)
-    fig.tight_layout()
-    fig.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "plots","figure_13.png"))
-
-    # fig_violin.text(0.0, 0.97, "A:", weight='bold', fontsize=22)
-    # fig_violin.text(0.0, 0.5, "B:", weight='bold', fontsize=22)
-    # fig_violin.tight_layout()
-    # fig_violin.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "figure_13_violin.png"))
