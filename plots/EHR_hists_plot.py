@@ -1,6 +1,9 @@
 import sys
 sys.path.insert(0, '../')
 
+import matplotlib
+matplotlib.use("Agg")
+
 import pandas as pd
 
 import seaborn as sns
@@ -9,7 +12,6 @@ import numpy as np
 import constants
 import argparse
 import os
-
 from matplotlib import pyplot as plt
 
 from statsmodels.sandbox.stats.multicomp import fdrcorrection0
@@ -22,7 +24,7 @@ QVAL="qval"
 METHOD='average'
 
 
-def main(base_folder=os.path.join(constants.OUTPUT_GLOBAL_DIR,"emp_fdr","MAX"), file_format="emp_diff_modules_{}_{}_passed_oob.tsv", algo=None, dataset=None, ax=None, font_size=24):
+def main(base_folder=os.path.join(constants.OUTPUT_GLOBAL_DIR, "oob"), file_format="emp_diff_modules_{}_{}_passed_oob.tsv", algo=None, dataset=None, ax=None, font_size=24):
     ax.set_facecolor('#ffffff')
 
     go_terms_emp_tables=pd.read_csv(os.path.join(base_folder, file_format.format(dataset,algo)),sep='\t', index_col=0).dropna()
@@ -37,8 +39,10 @@ def main(base_folder=os.path.join(constants.OUTPUT_GLOBAL_DIR,"emp_fdr","MAX"), 
         emp_hist = [0]
 
 
-    ax=sns.distplot(hg_hist, norm_hist=False, kde=False, label="# HG enriched terms", bins=20, hist_kws=dict(alpha=0.5), ax=ax)
-    ax=sns.distplot(emp_hist, norm_hist=False, kde=False, label="# EMP validated terms", bins=20, hist_kws=dict(alpha=0.5), ax=ax)
+    bins=np.histogram(np.hstack((hg_hist,emp_hist)), bins=40)[1] #get the bin edges
+
+    ax=sns.distplot(hg_hist, norm_hist=False, kde=False, label="# HG enriched terms", bins=bins, hist_kws=dict(alpha=0.5), ax=ax)
+    ax=sns.distplot(emp_hist, norm_hist=False, kde=False, label="# EMP validated terms", bins=bins, hist_kws=dict(alpha=0.5), ax=ax)
     ax.set_xlabel("enrichment score: -log10(pval)", fontsize=font_size)
     ax.set_ylabel("# of GO terms", fontsize=font_size)
     # plt.legend()# prop={"size": 20}, loc='upper right', facecolor='#ffffff')
@@ -47,7 +51,7 @@ def main(base_folder=os.path.join(constants.OUTPUT_GLOBAL_DIR,"emp_fdr","MAX"), 
     # subplot.legend()
     # subplot.set_title("algorithm: {}, dataset: {}\n"
     #           "EHR: {}".format(algo, dataset, round(len(emp_hist)/float(len(hg_hist)), 2)), fontdict={"size": 18})
-    ax.set_title("Dataset: {}, algorithm: {}".format(constants.DATASETS_ACRONYM[dataset], constants.ALGOS_ACRONYM[algo]), fontdict={"size": font_size})
+    ax.set_title("Dataset: {}, algorithm: {}".format(dataset, constants.ALGOS_ACRONYM[algo]), fontdict={"size": font_size})
 
     x0, xmax = ax.get_xlim()
     y0, ymax = ax.get_ylim()
@@ -60,7 +64,7 @@ def main(base_folder=os.path.join(constants.OUTPUT_GLOBAL_DIR,"emp_fdr","MAX"), 
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='args')
-    parser.add_argument('--datasets', dest='datasets', default="TNFa_2") # "TNFa_2,HC12,ROR_1,SHERA,SHEZH_1,ERS_1,IEM,APO,CBX,IFT" # Breast_Cancer.G50,Crohns_Disease.G50,Schizophrenia.G50,Triglycerides.G50,Type_2_Diabetes.G50,Coronary_Artery_Disease.G50,Bone_Mineral_Density.G50,Height1.G50,Alzheimer.G50,Age_Related_Macular_Degeneration.G50,Atrial_Fibrillation.G50"
+    parser.add_argument('--datasets', dest='datasets', default="shezh") # "TNFa_2,HC12,ROR_1,SHERA,SHEZH_1,ERS_1,IEM,APO,CBX,IFT" # Breast_Cancer.G50,Crohns_Disease.G50,Schizophrenia.G50,Triglycerides.G50,Type_2_Diabetes.G50,Coronary_Artery_Disease.G50,Bone_Mineral_Density.G50,Height1.G50,Alzheimer.G50,Age_Related_Macular_Degeneration.G50,Atrial_Fibrillation.G50"
     parser.add_argument('--prefix', dest='prefix', default="GE") # "PASCAL_SUM" "GE"
     parser.add_argument('--algos', dest='algos', default="jactivemodules_greedy,netbox") #,jactivemodules_sa,bionet,netbox,keypathwayminer_INES_GREEDY") # jactivemodules_sa,bionet,netbox,keypathwayminer_INES_GREEDY,hotnet2")
     parser.add_argument('--pf', dest='pf', default=4)
@@ -93,5 +97,5 @@ if __name__ == "__main__":
                      facecolor='#ffffff', ncol=2, prop={'size': font_size})
     figure.tight_layout()
     plt.subplots_adjust(left=0.05, right=0.95, top=0.8, bottom=0.05)
-    figure.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "figure_12_{}.png".format(prefix)) , bbox_extra_artists=(lgd,), bbox_inches='tight')
-    df_summary.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "figure_12_{}_matrix.tsv").format(prefix), sep='\t', index_label="algos")
+    figure.savefig(os.path.join(constants.OUTPUT_GLOBAL_DIR, "plots", "figure_12_{}.png".format(prefix)) , bbox_extra_artists=(lgd,), bbox_inches='tight')
+    df_summary.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "plots", "figure_12_{}_matrix.tsv").format(prefix), sep='\t', index_label="algos")

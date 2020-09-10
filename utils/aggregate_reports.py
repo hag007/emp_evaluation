@@ -154,7 +154,7 @@ def aggregate_datasets(DATASET_NAME = constants.DATASET_NAME):
             os.makedirs(output_dir)
         shutil.move(report_file_name,
                     os.path.join(output_dir, "report_{}.html".format(k)))
-
+        print(os.path.join(output_dir, "report_{}.html".format(k))
 
 
 def aggregate_disease(DATASET_NAME):

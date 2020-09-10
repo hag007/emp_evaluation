@@ -1,3 +1,5 @@
+import sys
+sys.path.insert(0, '../')
 import pandas as pd
 import numpy as np
 import os
@@ -19,11 +21,12 @@ if __name__=='__main__':
             # table2matrix(pd.read_csv('/home/hag007/Desktop/recovery_results_PASCAL_SUM_100.tsv',sep='\t'), 'algo', 'dataset', 'r_mean').to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "recovery_results_PASCAL_SUM_100_matrix_r.tsv"),sep='\t')
             # table2matrix(pd.read_csv('/home/hag007/Desktop/recovery_results_PASCAL_SUM_100.tsv',sep='\t'), 'algo', 'dataset', 'f1_mean').to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "recovery_results_PASCAL_SUM_100_matrix_f1.tsv"),sep='\t')
 
-            base_folder="/media/hag007/Data/bnet/output/emp_fdr/MAX"
-            df=pd.read_csv(os.path.join(base_folder, 'recovery_results_{}.tsv'.format(suffix)), sep='\t')
-            table2matrix(df, 'algo', 'dataset', 'p_mean').to_csv(os.path.join(base_folder, "recovery_results_{}_matrix_p.tsv".format(suffix)),sep='\t')
-            table2matrix(df, 'algo', 'dataset', 'r_mean').to_csv(os.path.join(base_folder, "recovery_results_{}_matrix_r.tsv".format(suffix)),sep='\t')
-            table2matrix(df, 'algo', 'dataset', 'f1_mean').to_csv(os.path.join(base_folder, "recovery_results_{}_matrix_f1.tsv".format(suffix)),sep='\t')
+            base_folder="/specific/netapp5/gaga/hagailevi/emp_test/report/evaluation"
+            df=pd.read_csv(os.path.join(base_folder, 'robustness_f1_{}.tsv'.format(suffix)), sep='\t')
+            table2matrix(df, 'algo', 'dataset', 'p_mean').to_csv(os.path.join(base_folder, "robustness_{}_matrix_p.tsv".format(suffix)),sep='\t')
+            table2matrix(df, 'algo', 'dataset', 'r_mean').to_csv(os.path.join(base_folder, "robustness_{}_matrix_r.tsv".format(suffix)),sep='\t')
+            table2matrix(df, 'algo', 'dataset', 'f1_mean').to_csv(os.path.join(base_folder, "robustness_{}_matrix_f1.tsv".format(suffix)),sep='\t')
             # df['non_empty_solutions']=df.apply(lambda a: np.sum(np.logical_and(np.array(a["precisions"][1:-1].split(','),dtype=np.float)!= 0, np.array(a["recalls"][1:-1].split(','),dtype=np.float) != 0)), axis=1)
             # table2matrix(df, 'algo', 'dataset', 'non_empty_solutions').to_csv(os.path.join(base_folder, "recovery_results_{}_matrix_empty.tsv".format(suffix)), sep='\t')
+
 

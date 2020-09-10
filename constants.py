@@ -17,10 +17,15 @@ mpl.rc('legend', fontsize=20)
 ALGOS_ACRONYM={"jactivemodules_greedy":"jAM_greedy",
                "jactivemodules_sa": "jAM_SA",
                "DOMINO": "DOMINO",
+               "DOMINO2": "DOMINO",
                "netbox": "NetBox",
                "keypathwayminer_INES_GREEDY": "KPM",
                "hotnet2": "HotNet2",
                "bionet": "Bionet",
+               "netbox3": "NetBox",
+               "DOMINO3": "DOMINO",
+               "netbox2_string" : "NetBox",
+               "DOMINO4": "DOMINO" 
                # "dcem": "Domino",
                # "domino": "DOMINO",
                # "dcem2": "dcem2",
@@ -29,9 +34,9 @@ ALGOS_ACRONYM={"jactivemodules_greedy":"jAM_greedy",
                # "my_netbox_td": "my_netbox_td"
                }
 
+ALGOS_NAMES=list(set(ALGOS_ACRONYM.values()))
 ALGOS=ALGOS_ACRONYM.keys() # sorted(ALGOS_ACRONYM.keys())
-COLORDICT = {a: sns.color_palette("bright", n_colors=len(ALGOS))[i] for i, a in
-                 enumerate(ALGOS)}
+COLORDICT = {a: sns.color_palette("bright", n_colors=len(ALGOS_NAMES))[ALGOS_NAMES.index(ALGOS_ACRONYM[a])] for a in ALGOS_ACRONYM}
 PATCHES = [Line2D([0], [0], marker='o', color='gray', label=ALGOS_ACRONYM[a], markersize=12, markerfacecolor=c, alpha=0.7) for a, c in COLORDICT.iteritems()]
 
 DATASETS_ACRONYM={"Breast_Cancer.G50":"BC",
