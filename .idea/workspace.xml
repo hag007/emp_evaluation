@@ -2,77 +2,160 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b7b9fdd2-7148-4525-9511-22abb191f0f8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/evaluation/aggreagte_terms_from_solutions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/evaluation/compare_ev_to_null.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/evaluation/robustness_s1_generate_subsampled_solutions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/evaluation/robustness_s2_aggergate_solutions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/evaluation/robustness_s3_compute_scores.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/evaluation/runners/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/evaluation/runners/ehr_counts_dip.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/evaluation/runners/ehr_counts_huri.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/evaluation/runners/ehr_counts_string.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/evaluation/runners/homogeneity_dip.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/evaluation/runners/homogeneity_huri.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/evaluation/runners/homogeneity_string.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/evaluation/runners/richness_revigo_dip.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/evaluation/runners/richness_revigo_huri.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/evaluation/runners/richness_revigo_string.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/evaluation/runners/robustness_dip_GE.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/evaluation/runners/robustness_dip_PASCAL_SUM.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/evaluation/runners/robustness_empty_solutions.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/evaluation/runners/robustness_huri_GE.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/evaluation/runners/robustness_huri_PASCAL_SUM.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/evaluation/runners/robustness_string_GE.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/evaluation/runners/robustness_string_PASCAL_SUM.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/aggregate_go_terms_boxplot.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/radalib_terms_per_repetitive_terms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/robustness_empties_plot.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/aggregated_plot_dip.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/aggregated_plot_huri.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/aggregated_plot_string.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/ehr_count_richness_dot_plots_dip.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/ehr_count_richness_dot_plots_huri.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/ehr_count_richness_dot_plots_string.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/homogeneity_plot_dip.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/homogeneity_plot_huri.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/homogeneity_plot_string.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/mEHR_grid_curve_dip.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/mEHR_grid_curve_huri.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/mEHR_grid_curve_string.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/richness_curve_plot_dip.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/richness_curve_plot_huri.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/richness_curve_plot_string.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/robustness_empties_plot_dip.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/robustness_empties_plot_huri.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/robustness_empties_plot_string.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/robustness_integrated_plot_dip.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/robustness_integrated_plot_huri.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/robustness_integrated_plot_string.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/summary_table_dip.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/summary_table_huri.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/runners/summary_table_string.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/plots/visualize_modules_amit.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation/\" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation/robustness_s2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation/robustness_s3.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation/runners/\" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation/runtime.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation/runtime_real_matrix.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/.empty_solutions_robustness.py.swp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/.homogeneity.py.swp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/1" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/compute_similarity_matrix.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/ehr_counts.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/ehr_counts_huri.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/ehr_counts_string.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/empty_solutions_robustness.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/homogeneity.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/homogeneity_heterogeneity_modules_summary.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/homogeneity_huri.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/homogeneity_string.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/modules_report.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/old/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/old/ehr_counts_old.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/old/intersect_GO_terms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/old/module_variability.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/old/richness_revigo_old.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/old/robustness_monolithic_old.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/old/similarity_between_go_set_lists.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/old/union_all_GO_terms_by_datasets.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/richness_revigo.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/richness_revigo_huri.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/richness_revigo_string.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/robustness_aupr.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/robustness_f1.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/robustness_s2_aggergate_solutions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/robustness_s3_compute_scores.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/evaluation_bu/variability_between_go_sets.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots/runtime_plots.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/EHR_hists_plot.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/aggregated_plot.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/aggregated_plot_horizontal.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/aggregated_plot_string.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/combined_criteria_scatter.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/ehr_count_richness_dot_plots.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/ehr_count_richness_dot_plots_huri.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/ehr_count_richness_dot_plots_string.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/empties_plot.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/hg_values_real_vs_random.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/homogeneity_plot.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/homogeneity_plot_huri.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/homogeneity_plot_string.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/mEHR_grid_curve.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/mEHR_grid_curve_huri.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/mEHR_grid_curve_per_prefix.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/mEHR_grid_curve_string.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/old/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/old/criteria_dot_plot.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/old/discrimination_summary_plot.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/old/ehr_count_richness_bar_plots.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/old/ehr_count_richness_violin_plots.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/old/fre_plotter.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/old/go_to_modules_plt.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/old/grid_plot_criteria.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/old/grid_plot_go_terms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/old/plot_running_scatter.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/old/plotter.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/old/plotter_similarity.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/old/recovery_dot_plot.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/old/revigo_heterogeneity_rank_score.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/old/similarity_dist.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/old/solutions_by terms_distance_hierarchical_plot.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/old/terms_per_module_summary.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/old/variance_dot_plot.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/permuted_vs_real_scores_as_figure.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/permuted_vs_real_scores_as_figure_all.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/permuted_vs_real_scores_as_matrix.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/permuted_vs_real_scores_as_visual.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/permuted_vs_real_scores_supp.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/richness_curve_plot.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/richness_curve_plot_huri.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/richness_curve_plot_string.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/richness_homogeneity_plot.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/richness_homogeneity_plot_huri.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/richness_homogeneity_plot_string.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/robustness_integrated_plot.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/robustness_integrated_plot_huri.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/robustness_integrated_plot_string.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/summary_statistic_barplots.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/summary_table.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/plots_bu/summary_table_string.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/constants.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/evaluation/compute_similarity_matrix.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/compute_similarity_matrix.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluation/aggreagte_terms_from_solutions.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/aggreagte_terms_from_solutions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluation/compare_ev_to_null.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/compare_ev_to_null.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/evaluation/ehr_counts.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/ehr_counts.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/evaluation/homogeneity.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/homogeneity.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/evaluation/modules_report.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/modules_report.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/evaluation/rank_random_terms.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/old/rank_random_terms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/evaluation/richness_revigo.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/richness_revigo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluation/old/rank_random_terms.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/old/rank_random_terms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluation/old/robustness_s1_generate_subsampled_solutions.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation_bu/robustness_s1_generate_subsampled_solutions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/evaluation/robustness_aupr.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/robustness_aupr.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/evaluation/robustness_empty_solutions.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/robustness_empty_solutions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/evaluation/robustness_f1.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/robustness_f1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plots/aggregated_plot.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/aggregated_plot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plots/ehr_count_richness_dot_plots.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/ehr_count_richness_dot_plots.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plots/empties_plot.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/plots/homogeneity_plot.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/homogeneity_plot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plots/mEHR_grid_curve.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/mEHR_grid_curve.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plots/old/aggregated_plot_horizontal.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/plots/richness_curve_plot.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/richness_curve_plot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluation/runners/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/runners/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluation/runners/ehr_counts_dip.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/runners/ehr_counts_dip.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluation/runners/ehr_counts_huri.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/runners/ehr_counts_huri.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluation/runners/ehr_counts_string.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/runners/ehr_counts_string.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluation/runners/homogeneity_dip.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/runners/homogeneity_dip.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluation/runners/homogeneity_huri.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/runners/homogeneity_huri.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluation/runners/homogeneity_string.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/runners/homogeneity_string.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluation/runners/richness_revigo_dip.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/runners/richness_revigo_dip.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluation/runners/richness_revigo_huri.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/runners/richness_revigo_huri.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluation/runners/richness_revigo_string.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/runners/richness_revigo_string.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluation/runners/robustness_dip_GE.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/runners/robustness_dip_GE.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluation/runners/robustness_dip_PASCAL_SUM.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/runners/robustness_dip_PASCAL_SUM.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluation/runners/robustness_empty_solutions.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/runners/robustness_empty_solutions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluation/runners/robustness_huri_GE.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/runners/robustness_huri_GE.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluation/runners/robustness_huri_PASCAL_SUM.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/runners/robustness_huri_PASCAL_SUM.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluation/runners/robustness_string_GE.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/runners/robustness_string_GE.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluation/runners/robustness_string_PASCAL_SUM.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/runners/robustness_string_PASCAL_SUM.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluation/summary_statistics.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation/summary_statistics.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/EHR_hists_plot.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/EHR_hists_plot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/aggregate_go_terms_boxplot.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/aggregate_go_terms_boxplot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/robustness_empties_plot.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/robustness_empties_plot.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plots/robustness_integrated_plot.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/robustness_integrated_plot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/aggregated_plot_dip.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/aggregated_plot_dip.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/aggregated_plot_huri.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/aggregated_plot_huri.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/aggregated_plot_string.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/aggregated_plot_string.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/ehr_count_richness_dot_plots_dip.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/ehr_count_richness_dot_plots_dip.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/ehr_count_richness_dot_plots_huri.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/ehr_count_richness_dot_plots_huri.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/ehr_count_richness_dot_plots_string.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/ehr_count_richness_dot_plots_string.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/homogeneity_plot_dip.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/homogeneity_plot_dip.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/homogeneity_plot_huri.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/homogeneity_plot_huri.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/homogeneity_plot_string.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/homogeneity_plot_string.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/mEHR_grid_curve_dip.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/mEHR_grid_curve_dip.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/mEHR_grid_curve_huri.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/mEHR_grid_curve_huri.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/mEHR_grid_curve_string.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/mEHR_grid_curve_string.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/richness_curve_plot_dip.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/richness_curve_plot_dip.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/richness_curve_plot_huri.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/richness_curve_plot_huri.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/richness_curve_plot_string.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/richness_curve_plot_string.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/robustness_empties_plot_dip.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/robustness_empties_plot_dip.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/robustness_empties_plot_huri.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/robustness_empties_plot_huri.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/robustness_empties_plot_string.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/robustness_empties_plot_string.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/robustness_integrated_plot_dip.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/robustness_integrated_plot_dip.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/robustness_integrated_plot_huri.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/robustness_integrated_plot_huri.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/robustness_integrated_plot_string.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/robustness_integrated_plot_string.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/summary_table_dip.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/summary_table_dip.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/summary_table_huri.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/summary_table_huri.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/runners/summary_table_string.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/runners/summary_table_string.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/summary_statistic_barplots.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/summary_statistic_barplots.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/plots/summary_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/summary_table.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/visualize_modules.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/visualize_modules.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plots/visualize_modules_amit.py" beforeDir="false" afterPath="$PROJECT_DIR$/plots/\" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/aggregate_reports.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/aggregate_reports.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/go_similarity.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/go_similarity.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/table_to_matrix.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/table_to_matrix.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -425,12 +508,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/utils/go_similarity.py</url>
-          <line>147</line>
+          <line>148</line>
           <option name="timeStamp" value="9" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/utils/go_similarity.py</url>
-          <line>109</line>
+          <line>110</line>
           <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -465,17 +548,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/plots/visualize_modules.py</url>
-          <line>228</line>
+          <line>230</line>
           <option name="timeStamp" value="34" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/plots/visualize_modules.py</url>
-          <line>224</line>
+          <line>226</line>
           <option name="timeStamp" value="38" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/plots/visualize_modules.py</url>
-          <line>215</line>
+          <line>217</line>
           <option name="timeStamp" value="39" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -485,42 +568,42 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/evaluation/old/rank_random_terms.py</url>
-          <line>38</line>
+          <line>35</line>
           <option name="timeStamp" value="41" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/evaluation/old/rank_random_terms.py</url>
-          <line>59</line>
+          <line>56</line>
           <option name="timeStamp" value="42" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/evaluation/aggreagte_terms_from_solutions.py</url>
-          <line>98</line>
+          <line>95</line>
           <option name="timeStamp" value="57" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/evaluation/aggreagte_terms_from_solutions.py</url>
-          <line>79</line>
+          <line>76</line>
           <option name="timeStamp" value="58" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/evaluation/aggreagte_terms_from_solutions.py</url>
-          <line>75</line>
+          <line>74</line>
           <option name="timeStamp" value="61" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/evaluation/aggreagte_terms_from_solutions.py</url>
-          <line>120</line>
+          <line>110</line>
           <option name="timeStamp" value="62" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/plots/aggregate_go_terms_boxplot.py</url>
-          <line>61</line>
+          <line>28</line>
           <option name="timeStamp" value="82" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/evaluation/old/rank_random_terms.py</url>
-          <line>55</line>
+          <line>52</line>
           <option name="timeStamp" value="83" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -535,7 +618,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/plots/aggregate_go_terms_boxplot.py</url>
-          <line>26</line>
+          <line>23</line>
           <option name="timeStamp" value="86" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -550,7 +633,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/plots/aggregate_go_terms_boxplot.py</url>
-          <line>141</line>
+          <line>150</line>
           <option name="timeStamp" value="89" />
         </line-breakpoint>
       </breakpoints>

@@ -10,7 +10,7 @@ import argparse
 
 
 def main(datasets, algos):
-
+    filtered_GO_terms=filtered_GO_terms=open(os.path.join(constants.GO_DIR,"filtered_go_terms.txt"), 'r').read().split()
     df_summary=pd.DataFrame()
     for cur_ds in datasets:
 
@@ -30,10 +30,10 @@ def main(datasets, algos):
                 n_modules.append(len(n_genes_per_modules.index))
                 total_num_genes.append(n_genes_per_modules.sum())
                 avg_num_genes.append(n_genes_per_modules.mean())
-                std_num_genes.append(n_genes_per_modules.std())
+                std_num_genes.append(n_genes_per_modules.std()) 
                 n_enriched_terms.append(len(pd.read_csv(
                     os.path.join(constants.OUTPUT_GLOBAL_DIR, "oob", "emp_diff_modules_{}_{}_passed_oob.tsv".format(cur_ds,cur_algo)),
-                    sep="\t").dropna().index))
+                    sep="\t", index_col=0).loc[filtered_GO_terms].dropna().index))
 
                 df_series=pd.Series({"algo": cur_algo, "dataset": cur_ds, "sig_terms": n_enriched_terms[-1],
                                      "n_genes": total_num_genes[-1], "module_size_mean": avg_num_genes[-1], "module_size_std": std_num_genes[-1], "n_modules": n_modules[-1]})
@@ -63,13 +63,13 @@ if __name__ == "__main__":
     algos = args.algos.split(",")
 
     datasets = ["tnfa", "hc", "ror", "shera", "shezh", "ers", "iem", "apo", "cbx", "ift"]
-    algos = ["DOMINO", "netbox", "jactivemodules_greedy", "jactivemodules_sa", "bionet", "keypathwayminer_INES_GREEDY", "hotnet2"]
+    algos = ["DOMINO2", "netbox", "jactivemodules_greedy", "jactivemodules_sa", "bionet", "keypathwayminer_INES_GREEDY", "hotnet2"]
     prefix = "GE"
     ds_summary=main(datasets=datasets, algos=algos)
     ds_summary.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "evaluation", "summary_statistics_{}.tsv".format(prefix)), sep='\t')
 
     datasets = ["brca", "crh", "scz", "tri", "t2d", "cad", "bmd", "hgt", "amd", "af"]
-    algos = ["DOMINO", "netbox", "jactivemodules_greedy", "jactivemodules_sa", "bionet", "keypathwayminer_INES_GREEDY", "hotnet2"]
+    algos = ["DOMINO2", "netbox", "jactivemodules_greedy", "jactivemodules_sa", "bionet", "keypathwayminer_INES_GREEDY", "hotnet2"]
     prefix = "PASCAL_SUM"
     ds_summary=main(datasets=datasets, algos=algos)
     ds_summary.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR, "evaluation", "summary_statistics_{}.tsv".format(prefix)), sep='\t')

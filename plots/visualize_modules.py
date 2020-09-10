@@ -1,3 +1,5 @@
+import sys
+sys.path.insert(0,"../")
 import pandas as pd
 import numpy as np
 import os
@@ -228,6 +230,8 @@ def generate_report_from_template(output_file_name, cy, algo_name="", hg_report=
 
     shutil.move(report_file_name,
                 os.path.join(output_dir, "graphes", "graph_{}.html".format(output_file_name)))
+
+    print(os.path.join(output_dir, "graphes", "graph_{}.html".format(output_file_name)))
     return "graph_{}.html".format(output_file_name)
 
 
@@ -281,17 +285,17 @@ def module_report(algo_name, module_index, module, bg_genes, score_file_name, ne
 if __name__ == "__main__":
 
     idx=""
-    ds="ror"
+    ds="tri"
     dataset_name="{}{}".format(ds, idx)
-    algo="netbox"
-    strategy="" # "_greedy" # "_INES_GREEDY"# "_greedy"
-    score_file_name="/media/hag007/Data/emp_test/original_datasets/{}.tsv".format(dataset_name)
+    algo="keypathwayminer"
+    strategy="_INES_GREEDY" # "_greedy" # "_INES_GREEDY"# "_greedy"
+    score_file_name=os.path.join(constants.BASE_PROFILE, "original_datasets/{}.tsv".format(dataset_name))
     # score_file_name="/media/hag007/Data/emp_test/permuted_datasets/tnfa_random_{}/data/scores.tsv".format(idx, dataset_name)
-    network_file_name="/media/hag007/Data/emp_test/networks/dip.sif"
+    network_file_name=os.path.join(constants.BASE_PROFILE,"networks/dip.sif")
 
-    module_name_format="/media/hag007/Data/emp_test/true_solutions/{}_{}{}/report/{}_module_genes_{{}}.txt".format(dataset_name,algo,strategy,algo)
-    module_bg_format="/media/hag007/Data/emp_test/true_solutions/{}_{}{}/report/{}_bg_genes_{{}}.txt".format(dataset_name,algo,strategy,algo)
-    modules_summary_file="/media/hag007/Data/emp_test/true_solutions/{}_{}{}/report/modules_summary.tsv".format(dataset_name,algo,strategy)
+    module_name_format=os.path.join(constants.BASE_PROFILE, "true_solutions/{}_{}{}/report/{}_module_genes_{{}}.txt".format(dataset_name,algo,strategy,algo))
+    module_bg_format=os.path.join(constants.BASE_PROFILE, "true_solutions/{}_{}{}/report/{}_bg_genes_{{}}.txt".format(dataset_name,algo,strategy,algo))
+    modules_summary_file=os.path.join(constants.BASE_PROFILE, "true_solutions/{}_{}{}/report/modules_summary.tsv".format(dataset_name,algo,strategy))
 
     modules_summary=pd.read_csv(modules_summary_file, index_col=0, sep='\t')
 

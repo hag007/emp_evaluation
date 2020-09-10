@@ -1,6 +1,9 @@
 import sys
 sys.path.insert(0, '../')
 
+import matplotlib
+matplotlib.use("Agg")
+
 import pandas as pd
 
 import seaborn as sns
@@ -9,7 +12,6 @@ import numpy as np
 import constants
 import argparse
 import os
-
 from matplotlib import pyplot as plt
 
 from statsmodels.sandbox.stats.multicomp import fdrcorrection0

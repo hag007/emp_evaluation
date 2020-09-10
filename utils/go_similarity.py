@@ -17,6 +17,7 @@ import multiprocessing
 from utils.daemon_multiprocessing import func_star
 
 import simplejson as json
+from simplejson.errors import JSONDecodeError
 
 has_go_resources=False
 has_go_metadata=False
@@ -150,10 +151,12 @@ def calc_similarity_matrix(set_0, set_1, pf, cache_file ,sim_method='Resnik'):
         print "len(params): {}".format(len(params))
 
 
-        p = multiprocessing.Pool(pf)
-        p.map(func_star, params)
-        p.close()
-        p.join()
+        # p = multiprocessing.Pool(pf)
+        # p.map(func_star, params)
+        # p.close()
+        # p.join()
+        for p in params:
+            p[0](*p[1])
 
     open(cache_file, 'w+').write(json.dumps(dict(adj)))
     return adj
@@ -163,9 +166,14 @@ def calc_intra_similarity(all_go_terms, pf, enrichment_scores, cache_file, semsi
 
     if not has_go_hierarchy:
         init_go_hierarchy()
-
-    if os.path.exists(cache_file):
+    
+    cache_loaded=True
+    try:
         adj=json.load(open(cache_file,'r'))
+    except Exception:
+        cache_loaded=False       
+
+    if cache_loaded:
         if all_go_terms is None:
             all_go_terms_r=list(np.unique(np.array([cur.split("_") for cur in adj]).flatten()))
         else:
@@ -187,10 +195,12 @@ def calc_intra_similarity(all_go_terms, pf, enrichment_scores, cache_file, semsi
         print "len(params): {}".format(len(params))
 
         init_go_metadata()
-        p = multiprocessing.Pool(pf)
-        p.map(func_star, params)
-        p.close()
-        p.join()
+#         p = multiprocessing.Pool(pf)
+#         p.map(func_star, params)
+#         p.close()
+#         p.join()
+        for p in params:
+            p[0](*p[1])
         adj=dict(adj)
         json.dump(adj, open(cache_file, 'w+'))
 

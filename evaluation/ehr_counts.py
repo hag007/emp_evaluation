@@ -10,42 +10,54 @@ from statsmodels.sandbox.stats.multicomp import fdrcorrection0
 
 def ehr_for_solution(algo_sample = None, dataset_sample = None,tsv_file_name=None, filtered_go_ids_file=None, hg_th=0.05):
 
+#     try:
+#         output_md = pd.read_csv(
+#             tsv_file_name.format(dataset_sample, algo_sample),
+#             sep='\t', index_col=0).dropna()
+#     except Exception, e:
+#         print e
+#         return 0, 0
+# 
+#     filtered_go_ids=open(filtered_go_ids_file,'r').read().split()
+#     filtered_genes=output_md.reindex(filtered_go_ids).loc[:,["GO name","hg_pval_max", "emp_pval_max", "passed_oob_permutation_test"]]
+# 
+#     print "total n_genes with pval:{}/{}".format(np.size(filtered_genes["hg_pval_max"].values), len(filtered_go_ids))
+# 
+#     sorted_genes_hg = filtered_genes.sort_values(by=['hg_pval_max'], ascending=False)
+#     sig_genes_hg_pval=np.append(sorted_genes_hg["hg_pval_max"].values,np.zeros(len(filtered_go_ids)-np.size(sorted_genes_hg["hg_pval_max"].values)))
+#     sig_genes_hg_pval = [10**(-x) for x in sig_genes_hg_pval]
+#     fdr_results = fdrcorrection0(sig_genes_hg_pval, alpha=hg_th, method='indep', is_sorted=False)
+#     n_hg_true = len([cur for cur in fdr_results[0] if cur])
+#     sig_hg_genes= sorted_genes_hg.iloc[:n_hg_true, :]
+#     if len(sig_hg_genes) == 0:
+#         HG_CUTOFF = 0
+#         print "HG cutoff: {}, n=0".format(HG_CUTOFF)
+# 
+#     else:
+#         HG_CUTOFF = 10**(-sig_hg_genes.iloc[- 1]["hg_pval_max"])
+#         print "HG cutoff: {}, n={}".format(HG_CUTOFF, len(sig_hg_genes.index))
+#     print(len(sig_hg_genes.index))
+#     sorted_genes_emp = filtered_genes.sort_values(by=['emp_pval_max'])[:len(sig_hg_genes.index)]
+#     sorted_genes_emp.loc[sorted_genes_emp['emp_pval_max']==0,'emp_pval_max']=1.0/5000
+#     sig_genes_emp_pval = sorted_genes_emp["emp_pval_max"].values
+#     fdr_results = fdrcorrection0(sig_genes_emp_pval, alpha=0.05, method='indep', is_sorted=False)
+#     n_emp_true = sum(fdr_results[0])
+#     sig_emp_genes = sorted_genes_emp.iloc[:n_emp_true, :]
+#     EMP_CUTOFF = sig_emp_genes.iloc[- 1]["emp_pval_max"] if n_emp_true > 0 else 0
+#     print "EMP cutoff: {}, n={}".format(EMP_CUTOFF, len(sig_emp_genes.index))
+   
     try:
-        output_md = pd.read_csv(
+        output_oob = pd.read_csv(
             tsv_file_name.format(dataset_sample, algo_sample),
             sep='\t', index_col=0).dropna()
     except Exception, e:
         print e
         return 0, 0
-
-    filtered_go_ids=open(filtered_go_ids_file,'r').read().split()
-    filtered_genes=output_md.reindex(filtered_go_ids).loc[:,["GO name","hg_pval_max", "emp_pval_max", "passed_oob_permutation_test"]]
-
-    print "total n_genes with pval:{}/{}".format(np.size(filtered_genes["hg_pval_max"].values), len(filtered_go_ids))
-
-    sorted_genes_hg = filtered_genes.sort_values(by=['hg_pval_max'], ascending=False)
-    sig_genes_hg_pval=np.append(sorted_genes_hg["hg_pval_max"].values,np.zeros(len(filtered_go_ids)-np.size(sorted_genes_hg["hg_pval_max"].values)))
-    sig_genes_hg_pval = [10**(-x) for x in sig_genes_hg_pval]
-    fdr_results = fdrcorrection0(sig_genes_hg_pval, alpha=hg_th, method='indep', is_sorted=False)
-    n_hg_true = len([cur for cur in fdr_results[0] if cur])
-    sig_hg_genes= sorted_genes_hg.iloc[:n_hg_true, :]
-    if len(sig_hg_genes) == 0:
-        HG_CUTOFF = 0
-        print "HG cutoff: {}, n=0".format(HG_CUTOFF)
-
-    else:
-        HG_CUTOFF = 10**(-sig_hg_genes.iloc[- 1]["hg_pval_max"])
-        print "HG cutoff: {}, n={}".format(HG_CUTOFF, len(sig_hg_genes.index))
-    print(len(sig_hg_genes.index))
-    sorted_genes_emp = filtered_genes.sort_values(by=['emp_pval_max'])[:len(sig_hg_genes.index)]
-    sorted_genes_emp.loc[sorted_genes_emp['emp_pval_max']==0,'emp_pval_max']=1.0/5000
-    sig_genes_emp_pval = sorted_genes_emp["emp_pval_max"].values
-    fdr_results = fdrcorrection0(sig_genes_emp_pval, alpha=0.05, method='indep', is_sorted=False)
-    n_emp_true = sum(fdr_results[0])
-    sig_emp_genes = sorted_genes_emp.iloc[:n_emp_true, :]
-    EMP_CUTOFF = sig_emp_genes.iloc[- 1]["emp_pval_max"] if n_emp_true > 0 else 0
-    print "EMP cutoff: {}, n={}".format(EMP_CUTOFF, len(sig_emp_genes.index))
-
+    
+    sig_hg_genes=output_oob.shape[0]
+    sig_emp_genes=output_oob.loc[output_oob.loc[:,'is_emp_pval_max_significant'].values].shape[0]
+   
+   
     return sig_hg_genes, sig_emp_genes
 
 
@@ -61,9 +73,9 @@ def main(datasets, algos, prefix):
 
             df_ds.loc["{}_{}".format(cur_ds,cur_alg), "algo"]=cur_alg
             df_ds.loc["{}_{}".format(cur_ds,cur_alg), "dataset"]=cur_ds
-            if type(sig_emp_genes)==int or type(sig_hg_genes)==int:
-                df_ds.loc["{}_{}".format(cur_ds, cur_alg), "n_emp"] = 0
-                df_ds.loc["{}_{}".format(cur_ds, cur_alg), "n_hg"] = 0
+            if type(sig_emp_genes)==int and type(sig_hg_genes)==int:
+                df_ds.loc["{}_{}".format(cur_ds, cur_alg), "n_emp"] = sig_emp_genes
+                df_ds.loc["{}_{}".format(cur_ds, cur_alg), "n_hg"] = sig_hg_genes
             else:
                 df_ds.loc["{}_{}".format(cur_ds,cur_alg),"n_emp"]=np.sum(sig_emp_genes["passed_oob_permutation_test"].apply(lambda x: np.any(np.array(x[1:-1].split(', '),dtype=np.bool))).values)
                 df_ds.loc["{}_{}".format(cur_ds,cur_alg), "n_hg"] = len(sig_hg_genes.index)

@@ -1,5 +1,7 @@
 import sys
 sys.path.insert(0,'../../')
+import matplotlib
+matplotlib.use("Agg")
 from plots.robustness_empties_plot import main
 import matplotlib.pyplot as plt
 import os

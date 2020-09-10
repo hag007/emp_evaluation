@@ -13,8 +13,6 @@ from sklearn.metrics import precision_recall_curve
 
 
 def main(prefix,datasets,algos,n_start,n_end,ss_ratios):
-    filtered_go_ids_file = os.path.join(constants.GO_DIR, "filtered_go_terms.txt")
-    filtered_go_ids = open(filtered_go_ids_file, 'r').read().split() + ["GO:0008150"]
     for ss_ratio in ss_ratios:
         df_pr_auc = pd.DataFrame()
         for dataset in datasets:
@@ -94,7 +92,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='args')
     parser.add_argument('--datasets', dest='datasets', default="brca")
-    parser.add_argument('--algos', dest='algos', default="DOMINO2")
+    parser.add_argument('--algos', dest='algos', default="DOMINO")
     parser.add_argument('--prefix', dest='prefix', default="GE")
     parser.add_argument('--n_start', help="number of iterations (total n permutation is pf*(n_end-n_start))",
                         dest='n_start', default=0)

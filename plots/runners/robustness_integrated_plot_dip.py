@@ -25,14 +25,14 @@ if __name__=="__main__":
     prefix="GE"
     suffix = "{}_100".format(prefix)
     zeros_file_name =  zeros_file_format.format(prefix)
-    algos = ["DOMINO2", "netbox", "jactivemodules_greedy", "jactivemodules_sa", "bionet", "keypathwayminer_INES_GREEDY", "hotnet2"]
+    algos = ["DOMINO2", "netbox"] # , "jactivemodules_greedy", "jactivemodules_sa", "bionet", "keypathwayminer_INES_GREEDY", "hotnet2"]
     datasets = ["tnfa", "hc", "ror", "shera", "shezh", "ers", "iem", "apo", "cbx", "ift"]
     plot_itegrated_recovery(ss_ratios, base_folder, auc_file_format, p_file_format, r_file_format, f1_file_format, zeros_file_name, suffix, axs=axs[:,0], title="GE", algos=algos, datasets=datasets)
 
     prefix = "PASCAL_SUM"
     suffix = "{}_100".format(prefix)
     zeros_file_name =  zeros_file_format.format(prefix)
-    algos = ["DOMINO2", "netbox", "jactivemodules_greedy", "jactivemodules_sa", "bionet", "keypathwayminer_INES_GREEDY", "hotnet2"]
+    algos = ["DOMINO2", "netbox"] # , "jactivemodules_greedy", "jactivemodules_sa", "bionet", "keypathwayminer_INES_GREEDY", "hotnet2"]
     datasets = ["brca", "crh", "scz", "tri", "t2d", "cad", "bmd", "hgt", "amd", "af"]
     plot_itegrated_recovery(ss_ratios, base_folder, auc_file_format, p_file_format, r_file_format,
                             f1_file_format, zeros_file_name, suffix, axs=axs[:,1], title="GWAS", algos=algos, datasets=datasets)

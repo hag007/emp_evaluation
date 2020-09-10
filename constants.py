@@ -25,7 +25,7 @@ ALGOS_ACRONYM={"jactivemodules_greedy":"jAM_greedy",
                "netbox3": "NetBox",
                "DOMINO3": "DOMINO",
                "netbox2_string" : "NetBox",
-               "DOMINO4": "DOMINO"
+               "DOMINO4": "DOMINO" 
                # "dcem": "Domino",
                # "domino": "DOMINO",
                # "dcem2": "dcem2",

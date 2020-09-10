@@ -59,7 +59,6 @@ def calc_homogeneity(cache_file, dataset=None, algo=None, module_i=None, base_fo
             break
 
     if len(vertices) == 0:
-        print(1)
         return cutoff, dataset, algo, module_i, np.nan
 
     module = list(set(module))
@@ -67,9 +66,10 @@ def calc_homogeneity(cache_file, dataset=None, algo=None, module_i=None, base_fo
     if len(module_r) < len(module):
         print "warning: {} terms of module are not included in graph".format(len(module) - len(module_r))
 
-    global_fraction = len(G.edges) / float(len(G.nodes) * (len(G.nodes) - 1))
+    # print(len(G.edges), float(len(G.nodes) * (len(G.nodes) - 1)))
+    # print(len(G.subgraph(module_r).edges) , max(float(len(module_r) * (len(module_r) - 1)), 10e-10))
+    global_fraction = max(len(G.edges) / float(len(G.nodes) * (len(G.nodes) - 1)), 10e-10)
     intra_fraction = len(G.subgraph(module_r).edges) / max(float(len(module_r) * (len(module_r) - 1)), 10e-10)
-    print(2)
     return cutoff, dataset, algo, module_i, min(10e10, intra_fraction / global_fraction)
 
 
@@ -108,6 +108,10 @@ def main(prefix, base_folder, sim_method, file_format, pf, datasets, algos, cuto
     p = MyPool(pf)
     results = p.map(func_star, params)
     p.close()
+    # results=[]
+    # for pr in params:
+    #         results.append(pr[0](*pr[1]))
+
     for cur_res in results:
         h_scores[cur_res[0]].loc["{}_{}_modules_{}".format(cur_res[1], cur_res[2], cur_res[3]), "homogeneity_score"] = \
         cur_res[4]

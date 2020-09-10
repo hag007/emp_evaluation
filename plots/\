@@ -1,3 +1,5 @@
+import sys
+sys.path.insert(0,"../")
 import pandas as pd
 import numpy as np
 import os
@@ -281,16 +283,17 @@ def module_report(algo_name, module_index, module, bg_genes, score_file_name, ne
 if __name__ == "__main__":
 
     idx=""
-    ds="deg"
+    ds="tri"
     dataset_name="{}{}".format(ds, idx)
-    algo="DOMINO"
-    strategy="" # "_greedy" # "_INES_GREEDY"# "_greedy"
-    root_folder="/media/hag007/Data/DOMINO_amit/"
-    report_folder="/media/hag007/Data/DOMINO_amit/report/report"
-    network_file_name=os.path.join(root_folder,"network/dip_mouse.sif")
-    constants.TRUE_SOLUTIONS_DIR=report_folder
-    module_name_format="{}/{}_module_genes_{{}}.txt".format(report_folder,algo)
-    modules_summary_file="{}/modules_summary.tsv".format(report_folder)
+    algo="keypathwayminer"
+    strategy="_INES_GREEDY"# "_greedy"
+    score_file_name=os.path.join(constants.BASE_PROFILE, "original_datasets/{}.tsv".format(dataset_name))
+    # score_file_name="/media/hag007/Data/emp_test/permuted_datasets/tnfa_random_{}/data/scores.tsv".format(idx, dataset_name)
+    network_file_name=os.path.join(constants.BASE_PROFILE,"networks/dip.sif")
+
+    module_name_format=os.path.join(constants.BASE_PROFILE, "true_solutions/{}_{}{}/report/{}_module_genes_{{}}.txt".format(dataset_name,algo,strategy,algo))
+    module_bg_format=os.path.join(constants.BASE_PROFILE, "true_solutions/{}_{}{}/report/{}_bg_genes_{{}}.txt".format(dataset_name,algo,strategy,algo))
+    modules_summary_file=os.path.join(constants.BASE_PROFILE, "true_solutions/{}_{}{}/report/modules_summary.tsv".format(dataset_name,algo,strategy))
 
     modules_summary=pd.read_csv(modules_summary_file, index_col=0, sep='\t')
 
@@ -298,5 +301,5 @@ if __name__ == "__main__":
     all_bg_genes=[[b.strip() for b in open(module_bg_format.format(a),'r').readlines()] for a in np.arange(len(modules_summary.index))]
 
 
-    build_all_reports(algo+strategy, dataset_name, modules, all_bg_genes, None, network_file_name)
+    build_all_reports(algo+strategy, dataset_name, modules, all_bg_genes, score_file_name, network_file_name)
 

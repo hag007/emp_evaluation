@@ -33,7 +33,7 @@ def plot_itegrated_recovery(ss_ratios, base_folder, auc_file_format, p_file_form
         df_zeros = pd.read_csv(zero_file_name, sep='\t', index_col=0).loc[pd.read_csv(os.path.join(base_folder, p_file_format.format(suffix, cur_ss_ratio)), sep='\t',
                         index_col=0).index]
         df_zeros.loc[:,:] = 1
-        n_iterations = 100
+        n_iterations = 3 
         print "n_iteration for ss_ratio={}: {}".format(cur_ss_ratio, n_iterations)
         df_cur_pr = pd.read_csv(os.path.join(base_folder, auc_file_format.format(suffix, cur_ss_ratio)), sep='\t',
                                 index_col=0).loc[:,datasets]
@@ -73,10 +73,9 @@ def plot_itegrated_recovery(ss_ratios, base_folder, auc_file_format, p_file_form
     patches_1 = [Line2D([0], [0], marker='o', color='gray', label=constants.ALGOS_ACRONYM[a], markersize=12, markerfacecolor=constants.COLORDICT[a], alpha=0.7) for a in algos]
     ss_ratios = 1 - np.array(ss_ratios)
 
-    prs.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR,"prs_{}.tsv".format(title)), sep='\t')
-    empties.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR,"empties_{}.tsv".format(title)), sep='\t')
-    f1s.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR,"f1s_{}.tsv".format(title)), sep='\t')
-
+#     prs.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR,"prs_{}.tsv".format(title)), sep='\t')
+#     empties.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR,"empties_{}.tsv".format(title)), sep='\t')
+#     f1s.to_csv(os.path.join(constants.OUTPUT_GLOBAL_DIR,"f1s_{}.tsv".format(title)), sep='\t')
 
     for cur in set(prs.index).intersection(constants.ALGOS):
         axs[0].plot([a for a,b in zip(ss_ratios,prs.loc[cur]) if not np.isnan(b)], [a for a in prs.loc[cur] if not np.isnan(a) ], c=constants.COLORDICT[cur])
@@ -109,14 +108,14 @@ if __name__=="__main__":
 
     fig,axs=plt.subplots(2,2,figsize=(18,16))
     prefix="GE"
-    suffix = "{}_100".format(prefix)
+    suffix = "{}_3".format(prefix)
     zeros_file_name =  zeros_file_format.format(prefix)
     algos = ['DOMINO4', 'netbox2_string']
     datasets = ["tnfa", "hc", "ror", "shera", "shezh", "ers", "iem", "apo", "cbx", "ift"]
     plot_itegrated_recovery(ss_ratios, base_folder, auc_file_format, p_file_format, r_file_format, f1_file_format, zeros_file_name, suffix, axs=axs[:,0], title="GE", algos=algos, datasets=datasets)
 
     prefix = "PASCAL_SUM"
-    suffix = "{}_100".format(prefix)
+    suffix = "{}_3".format(prefix)
     zeros_file_name =  zeros_file_format.format(prefix)
     algos = ['DOMINO4', 'netbox2_string']
     datasets = ["brca", "crh", "scz", "tri", "t2d", "cad", "bmd", "hgt", "amd", "af"]
